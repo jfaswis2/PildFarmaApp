@@ -26,4 +26,11 @@ public class password_reset extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this,login.class);
+        startActivity(intent);
+        finish();
+    }
 }

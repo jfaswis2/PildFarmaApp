@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login"
+    android:background="@drawable/login">
+
+
+    <EditText
+        android:id="@+id/editText_login_correo"
+        android:layout_width="0dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/custom_input"
+        android:drawableStart="@drawable/custom_email_icon"
+        android:drawablePadding="12dp"
+        android:ems="10"
+        android:hint="@string/correo"
+        android:inputType="textPersonName"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:textColor="@android:color/darker_gray"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/editText_login_contrasena"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editText_login_contrasena"
+        android:layout_width="0dp"
+        android:layout_height="58dp"
+        android:layout_marginBottom="80dp"
+        android:background="@drawable/custom_input"
+        android:drawableStart="@drawable/custom_lock_icon"
+        android:drawablePadding="12dp"
+        android:ems="10"
+        android:hint="@string/contrasena"
+        android:inputType="textPassword"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:textColor="@android:color/darker_gray"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/bttn_entrar_aclogin"
+        app:layout_constraintEnd_toEndOf="@+id/editText_login_correo"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editText_login_correo" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/app_name"
+        android:textColor="@color/azul"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintStart_toStartOf="@+id/editText_login_correo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="60dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/iniciar_sesion"
+        android:textColor="@color/black"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@+id/editText_login_correo"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.126" />
+
+    <Button
+        android:id="@+id/bttn_entrar_aclogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="140dp"
+        android:background="@drawable/borde_redondo_boton_login"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/app_login"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editText_login_contrasena"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editText_login_contrasena" />
+
+    <CheckBox
+        android:id="@+id/checkBox_login_sesion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/no_cerrar_sesion"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintStart_toStartOf="@+id/editText_login_contrasena"
+        app:layout_constraintTop_toBottomOf="@+id/editText_login_contrasena"
+        android:buttonTint="@color/azul"/>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintEnd_toStartOf="@+id/textView4"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/bttn_entrar_aclogin"
+        app:layout_constraintTop_toBottomOf="@+id/bttn_entrar_aclogin" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/conectarse_con"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="@+id/bttn_entrar_aclogin"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/bttn_entrar_aclogin"
+        app:layout_constraintTop_toBottomOf="@+id/bttn_entrar_aclogin" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="34dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="@+id/bttn_entrar_aclogin"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/bttn_entrar_aclogin" />
+
+    <ImageButton
+        android:id="@+id/bttn_identificarse_google_aclogin"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/borde_redondo_boton_google_login"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="@+id/textView4"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:srcCompat="@drawable/ic_icons8_google__2_" />
+
+    <TextView
+        android:id="@+id/bttntext_crear_cuenta_aclogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/app_register"
+        android:textColor="@color/azul"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/editText_login_correo"
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/bttntext_recuperar_contraseña_aclogin"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="22dp"
+        android:text="@string/login_recuperar_contrasena"
+        android:textColor="@color/azul"
+        app:layout_constraintEnd_toEndOf="@+id/editText_login_contrasena"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/checkBox_login_sesion"
+        app:layout_constraintTop_toBottomOf="@+id/editText_login_contrasena" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

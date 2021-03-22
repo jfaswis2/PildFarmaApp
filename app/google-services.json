@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "790694917723",
+    "project_id": "pildfarmaapp-76a6b",
+    "storage_bucket": "pildfarmaapp-76a6b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790694917723:android:33639dcfa792da1478b17e",
+        "android_client_info": {
+          "package_name": "com.example.pildfarmaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "790694917723-d55o6qr4nkmkch985qbhkvopokqakfko.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkoOnpoFOGOQx9SqhU719IIXJVPPCgag0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "790694917723-d55o6qr4nkmkch985qbhkvopokqakfko.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

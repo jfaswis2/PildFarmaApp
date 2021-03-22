@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:title="@string/base_inicio"
+        android:icon="@drawable/ic_home_24"/>
+    <item
+        android:id="@+id/historial"
+        android:title="@string/base_historial"
+        android:icon="@drawable/ic_historial"/>
+    <item
+        android:id="@+id/anchor"
+        android:title=""/>
+    <item
+        android:id="@+id/perfil"
+        android:title="@string/base_perfil"
+        android:icon="@drawable/ic_person_24"/>
+    <item
+        android:id="@+id/ajustes"
+        android:title="@string/base_ajustes"
+        android:icon="@drawable/ic_baseline_settings_24"/>
+</menu>

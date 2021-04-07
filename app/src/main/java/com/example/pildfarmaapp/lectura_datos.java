@@ -35,6 +35,8 @@ public class lectura_datos extends AppCompatActivity {
     TextRecognizer recognizer;
     EditText editText;
     Uri image_uri;
+    char[] reconocimientoChar;
+    String resultadoTexto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,8 +118,13 @@ public class lectura_datos extends AppCompatActivity {
                 Task<Text> resultText = recognizer.process(image).addOnSuccessListener(new OnSuccessListener<Text>() {
                     @Override
                     public void onSuccess(Text text) {
-                        String resultText = text.getText();
-                        editText.setText(resultText);
+                        resultadoTexto = text.getText();
+                        reconocimientoChar=resultadoTexto.toCharArray();
+                        //encontrarNombre();
+                        //encontrarDosis();
+                        //encontrarFrecuecia();
+                        encontrarViaAdministracion();
+                        //editText.setText(resultadoTexto);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -130,6 +137,114 @@ public class lectura_datos extends AppCompatActivity {
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
+        }
+    }
+
+    private void encontrarNombre(){
+        int contador=0;
+        StringBuilder sb = new StringBuilder();
+        while (!Character.isDigit(reconocimientoChar[contador])){
+            sb.append(reconocimientoChar[contador]);
+            contador++;
+
+        }
+
+        String nombreReceta = sb.toString();
+        editText.setText(nombreReceta);
+    }
+
+    private void encontrarDosis(){
+        if(resultadoTexto.contains("Inhalació")){
+            int posicion=resultadoTexto.indexOf("Inhalació");
+            int valor=posicion;
+            boolean estado = true;
+            while (estado){
+                if(Character.isAlphabetic(reconocimientoChar[valor])){
+                    valor--;
+                }else{
+                    String hola= Character.toString(reconocimientoChar[valor-1]);
+                    editText.setText(hola);
+                    estado=false;
+                }
+
+
+            }
+        }else if(resultadoTexto.contains("Comprimit")){
+            int posicion=resultadoTexto.indexOf("Comprimit");
+            int valor=posicion;
+            boolean estado = true;
+            while (estado){
+                if(Character.isAlphabetic(reconocimientoChar[valor])){
+                    valor--;
+                }else{
+                    String hola= Character.toString(reconocimientoChar[valor-1]);
+                    editText.setText(hola+" Comprimit");//TODO
+                    estado=false;
+                }
+
+
+            }
+        }else if(resultadoTexto.contains("Unitat")){
+            int posicion=resultadoTexto.indexOf("Unitat");
+            int valor=posicion;
+            boolean estado = true;
+            while (estado){
+                if(Character.isAlphabetic(reconocimientoChar[valor])){
+                    valor--;
+                }else{
+                    String hola= Character.toString(reconocimientoChar[valor-1]);
+                    editText.setText(hola);
+                    estado=false;
+                }
+
+
+            }
+        }else if(resultadoTexto.contains("Aplicació")){
+            int posicion=resultadoTexto.indexOf("Aplicació");
+            int valor=posicion;
+            boolean estado = true;
+            while (estado){
+                if(Character.isAlphabetic(reconocimientoChar[valor])){
+                    valor--;
+                }else{
+                    String hola= Character.toString(reconocimientoChar[valor-1]);
+                    editText.setText(hola);
+                    estado=false;
+                }
+
+
+            }
+        }else if(resultadoTexto.contains("Segons")){
+            editText.setText("Segons pauta o segons evolució clínica");
+        }
+    }
+
+    private void encontrarFrecuecia(){
+        if(resultadoTexto.contains("Hores")){
+            int posicion=resultadoTexto.indexOf("Hores");
+            int valor=posicion;
+            boolean estado = true;
+            String horas="";
+            while (estado){
+                if(Character.isDigit(reconocimientoChar[valor-2])){
+                    horas=reconocimientoChar[valor-2] + horas;
+                    valor--;
+                }else{
+                    estado=false;
+
+                }
+
+
+            }
+            editText.setText(horas);
+        }
+    }
+
+    private void encontrarViaAdministracion(){
+        if(resultadoTexto.contains("pulmonar")){
+            editText.setText("Via pulmonar");
+        }else if(resultadoTexto.contains("oral")){
+            editText.setText("Via oral");
         }
     }
 

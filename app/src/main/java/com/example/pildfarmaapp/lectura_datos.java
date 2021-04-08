@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,70 +31,39 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 public class lectura_datos extends AppCompatActivity {
 
     ImageView imageView;
-    CropImageView cropImageView;
     Bitmap bitmap;
     TextRecognizer recognizer;
-    EditText editText;
+    EditText etMedicamento,etDosis,etFrecuencia,etViaAdmin,etDuracionTrata;
     Uri image_uri;
     char[] reconocimientoChar;
     String resultadoTexto;
+    TextView NuevaFoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lectura_datos);
 
-        editText = findViewById(R.id.TextoReconocido);
+
+        etMedicamento = findViewById(R.id.NombreMedicamento);
+        etDosis = findViewById(R.id.Dosis);
+        etFrecuencia = findViewById(R.id.Frecuencia);
+        etViaAdmin = findViewById(R.id.ViaAdministracion);
+        etDuracionTrata = findViewById(R.id.DuracionTratamiento);
         imageView = findViewById(R.id.Foto);
+        NuevaFoto = findViewById(R.id.NuevaFoto);
         startCropActivity();
-    }
-/*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-
-
-
-
-
-            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-                CropImage.ActivityResult result = CropImage.getActivityResult(data);
-                if(resultCode == RESULT_OK){
-                    Uri resultUri = result.getUri();
-                    //imageView.setImageURI(resultUri);
-                    BitmapDrawable bitmapDrawable = (BitmapDrawable)imageView.getDrawable();
-                    bitmap = bitmapDrawable.getBitmap();
-
-                    ///
-                    Log.i("TAG", "Result->" + bitmap);
-                    InputImage image = InputImage.fromBitmap(bitmap, 0);
-                    recognizer = TextRecognition.getClient();
-                    Task<Text> resultText = recognizer.process(image).addOnSuccessListener(new OnSuccessListener<Text>() {
-                        @Override
-                        public void onSuccess(Text text) {
-                            String resultText = text.getText();
-                            editText.setText(resultText);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                        }
-                    });
-
-                }
+        NuevaFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startCropActivity();
+                finish();
             }
-
+        });
     }
 
-    private void camara() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
 
-            startActivityForResult(cameraIntent, 100);
-        }
-    }*/
 
     private void startCropActivity(){
         CropImage.activity()
@@ -120,11 +90,12 @@ public class lectura_datos extends AppCompatActivity {
                     public void onSuccess(Text text) {
                         resultadoTexto = text.getText();
                         reconocimientoChar=resultadoTexto.toCharArray();
-                        //encontrarNombre();
-                        //encontrarDosis();
-                        //encontrarFrecuecia();
+                        encontrarNombre();
+                        encontrarDosis();
+                        encontrarFrecuecia();
                         encontrarViaAdministracion();
-                        //editText.setText(resultadoTexto);
+                        encontrarDuracionTrata();
+                        //editText.setText(resultadoTexto);//TODO
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -132,7 +103,7 @@ public class lectura_datos extends AppCompatActivity {
 
                     }
                 });
-                //ImageView myImageView = findViewById(R.id.Foto);
+                //ImageView myImageView = findViewById(R.id.Foto);//TODO
                 //myImageView.setImageURI(resultUri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
@@ -146,11 +117,9 @@ public class lectura_datos extends AppCompatActivity {
         while (!Character.isDigit(reconocimientoChar[contador])){
             sb.append(reconocimientoChar[contador]);
             contador++;
-
         }
-
         String nombreReceta = sb.toString();
-        editText.setText(nombreReceta);
+        etMedicamento.setText(nombreReceta);
     }
 
     private void encontrarDosis(){
@@ -163,11 +132,9 @@ public class lectura_datos extends AppCompatActivity {
                     valor--;
                 }else{
                     String hola= Character.toString(reconocimientoChar[valor-1]);
-                    editText.setText(hola);
+                    etDosis.setText(hola);
                     estado=false;
                 }
-
-
             }
         }else if(resultadoTexto.contains("Comprimit")){
             int posicion=resultadoTexto.indexOf("Comprimit");
@@ -178,11 +145,9 @@ public class lectura_datos extends AppCompatActivity {
                     valor--;
                 }else{
                     String hola= Character.toString(reconocimientoChar[valor-1]);
-                    editText.setText(hola+" Comprimit");//TODO
+                    etDosis.setText(hola+" Comprimit");//TODO
                     estado=false;
                 }
-
-
             }
         }else if(resultadoTexto.contains("Unitat")){
             int posicion=resultadoTexto.indexOf("Unitat");
@@ -193,11 +158,9 @@ public class lectura_datos extends AppCompatActivity {
                     valor--;
                 }else{
                     String hola= Character.toString(reconocimientoChar[valor-1]);
-                    editText.setText(hola);
+                    etDosis.setText(hola);
                     estado=false;
                 }
-
-
             }
         }else if(resultadoTexto.contains("Aplicació")){
             int posicion=resultadoTexto.indexOf("Aplicació");
@@ -208,14 +171,12 @@ public class lectura_datos extends AppCompatActivity {
                     valor--;
                 }else{
                     String hola= Character.toString(reconocimientoChar[valor-1]);
-                    editText.setText(hola);
+                    etDosis.setText(hola);
                     estado=false;
                 }
-
-
             }
         }else if(resultadoTexto.contains("Segons")){
-            editText.setText("Segons pauta o segons evolució clínica");
+            etDosis.setText("Segons pauta o segons evolució clínica");
         }
     }
 
@@ -233,20 +194,37 @@ public class lectura_datos extends AppCompatActivity {
                     estado=false;
 
                 }
-
-
             }
-            editText.setText(horas);
+            etFrecuencia.setText(horas);
         }
     }
 
     private void encontrarViaAdministracion(){
         if(resultadoTexto.contains("pulmonar")){
-            editText.setText("Via pulmonar");
+            etViaAdmin.setText("Via pulmonar");
         }else if(resultadoTexto.contains("oral")){
-            editText.setText("Via oral");
+            etViaAdmin.setText("Via oral");
         }
     }
 
-
+    private void encontrarDuracionTrata(){
+        if(resultadoTexto.contains("dies")){
+            int posicion=resultadoTexto.indexOf("dies");
+            int valor=posicion;
+            boolean estado = true;
+            String horas="";
+            while (estado){
+                if(Character.isDigit(reconocimientoChar[valor-1])){
+                    horas=reconocimientoChar[valor-1] + horas;
+                    valor--;
+                }if(reconocimientoChar[valor-1]==' ') {
+                    valor--;
+                }
+                else{
+                    estado=false;
+                }
+            }
+            etDuracionTrata.setText(horas+" dies");
+        }
+    }
 }

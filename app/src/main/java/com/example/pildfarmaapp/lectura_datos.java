@@ -58,7 +58,7 @@ public class lectura_datos extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startCropActivity();
-                finish();
+
             }
         });
     }
@@ -208,23 +208,33 @@ public class lectura_datos extends AppCompatActivity {
     }
 
     private void encontrarDuracionTrata(){
-        if(resultadoTexto.contains("dies")){
-            int posicion=resultadoTexto.indexOf("dies");
-            int valor=posicion;
+        if(resultadoTexto.contains("dies")) {
+            int posicion = resultadoTexto.indexOf("dies");
+            int valor = posicion;
             boolean estado = true;
-            String horas="";
-            while (estado){
-                if(Character.isDigit(reconocimientoChar[valor-1])){
-                    horas=reconocimientoChar[valor-1] + horas;
-                    valor--;
-                }if(reconocimientoChar[valor-1]==' ') {
-                    valor--;
+            String horas = "";
+
+            try {
+
+
+                while (estado) {
+
+                    if (Character.isDigit(reconocimientoChar[valor - 1])) {
+                        horas = reconocimientoChar[valor - 1] + horas;
+                        valor--;
+                    }
+                    if (reconocimientoChar[valor - 1] == ' ') {
+                        valor--;
+                    } else {
+                        estado = false;
+
+                    }
                 }
-                else{
-                    estado=false;
-                }
+                etDuracionTrata.setText(horas + " dies");
             }
-            etDuracionTrata.setText(horas+" dies");
-        }
-    }
+
+            catch (Exception e){
+                etDuracionTrata.setText("No encontrado");
+            }
+    }}
 }

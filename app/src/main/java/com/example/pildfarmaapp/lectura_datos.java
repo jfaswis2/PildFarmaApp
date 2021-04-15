@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,7 +39,10 @@ public class lectura_datos extends AppCompatActivity {
     Uri image_uri;
     char[] reconocimientoChar;
     String resultadoTexto;
-    TextView NuevaFoto;
+    TextView NuevaFoto,NombreVerificacion,IntervaloFechas;
+    Button guardar,aceptarVeri,cancelarVeri;
+    AlertDialog.Builder dialogBuilder;
+    AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +57,7 @@ public class lectura_datos extends AppCompatActivity {
         etDuracionTrata = findViewById(R.id.DuracionTratamiento);
         imageView = findViewById(R.id.Foto);
         NuevaFoto = findViewById(R.id.NuevaFoto);
+        guardar = findViewById(R.id.btn_ver_datos_guardar);
         startCropActivity();
 
         NuevaFoto.setOnClickListener(new View.OnClickListener() {
@@ -61,15 +67,51 @@ public class lectura_datos extends AppCompatActivity {
 
             }
         });
+
+
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newConfirmDialog();
+            }
+        });
     }
 
 
+    private void newConfirmDialog(){
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View contactPopupView = getLayoutInflater().inflate(R.layout.fragment_verificacion,null);
+        NombreVerificacion = (TextView) contactPopupView.findViewById(R.id.Nombre_medicamento_verificacion);
+        IntervaloFechas = (TextView) contactPopupView.findViewById(R.id.intervalo_fechas_verfificacion);
+
+        aceptarVeri = (Button) contactPopupView.findViewById(R.id.bttn_aceptar_verificacion);
+        cancelarVeri = (Button) contactPopupView.findViewById(R.id.bttn_cancelar_verificacion);
+
+        dialogBuilder.setView(contactPopupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        cancelarVeri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        aceptarVeri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
 
     private void startCropActivity(){
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .start(this);
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

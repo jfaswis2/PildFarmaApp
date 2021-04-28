@@ -146,17 +146,16 @@
         app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/bttn_entrar_aclogin" />
 
-    <ImageButton
+    <com.google.android.gms.common.SignInButton
         android:id="@+id/bttn_identificarse_google_aclogin"
-        android:layout_width="50dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="24dp"
-        android:background="@drawable/borde_redondo_boton_google_login"
-        android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="@+id/textView4"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:srcCompat="@drawable/ic_icons8_google__2_" />
+        app:buttonSize="wide"
+        android:textColor="@color/azul"
+        app:layout_constraintEnd_toEndOf="@+id/bttn_entrar_aclogin"
+        app:layout_constraintStart_toStartOf="@+id/bttn_entrar_aclogin"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <TextView
         android:id="@+id/bttntext_crear_cuenta_aclogin"

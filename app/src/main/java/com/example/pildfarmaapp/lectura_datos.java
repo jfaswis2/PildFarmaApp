@@ -30,6 +30,8 @@ import com.google.mlkit.vision.text.TextRecognizer;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.util.Calendar;
+
 public class lectura_datos extends AppCompatActivity {
 
     ImageView imageView;
@@ -38,7 +40,7 @@ public class lectura_datos extends AppCompatActivity {
     EditText etMedicamento,etDosis,etFrecuencia,etViaAdmin,etDuracionTrata;
     Uri image_uri;
     char[] reconocimientoChar;
-    String resultadoTexto;
+    String resultadoTexto,horas,nombreReceta;
     TextView NuevaFoto,NombreVerificacion,IntervaloFechas;
     Button guardar,aceptarVeri,cancelarVeri;
     AlertDialog.Builder dialogBuilder;
@@ -82,8 +84,9 @@ public class lectura_datos extends AppCompatActivity {
         dialogBuilder = new AlertDialog.Builder(this);
         final View contactPopupView = getLayoutInflater().inflate(R.layout.fragment_verificacion,null);
         NombreVerificacion = (TextView) contactPopupView.findViewById(R.id.Nombre_medicamento_verificacion);
+        NombreVerificacion.setText(nombreReceta);
         IntervaloFechas = (TextView) contactPopupView.findViewById(R.id.intervalo_fechas_verfificacion);
-
+        IntervaloFechas.setText(CalculoFecha());
         aceptarVeri = (Button) contactPopupView.findViewById(R.id.bttn_aceptar_verificacion);
         cancelarVeri = (Button) contactPopupView.findViewById(R.id.bttn_cancelar_verificacion);
 
@@ -104,6 +107,17 @@ public class lectura_datos extends AppCompatActivity {
 
             }
         });
+    }
+
+    private String CalculoFecha(){
+        String intervalo;
+
+        Calendar today = Calendar.getInstance();
+        intervalo = today.get(Calendar.DAY_OF_MONTH) +"/"+(today.get(Calendar.MONTH)+1)+"/"+today.get(Calendar.YEAR)+"-";
+        today.add(Calendar.DAY_OF_MONTH,Integer.parseInt(this.horas));
+        intervalo +=today.get(Calendar.DAY_OF_MONTH) +"/"+(today.get(Calendar.MONTH)+1)+"/"+today.get(Calendar.YEAR);
+
+        return intervalo;
     }
 
     private void startCropActivity(){
@@ -156,11 +170,14 @@ public class lectura_datos extends AppCompatActivity {
     private void encontrarNombre(){
         int contador=0;
         StringBuilder sb = new StringBuilder();
-        while (!Character.isDigit(reconocimientoChar[contador])){
-            sb.append(reconocimientoChar[contador]);
+        while (!Character.isDigit(reconocimientoChar[contador])) {
+            if (Character.isAlphabetic(reconocimientoChar[contador])) {
+                sb.append(reconocimientoChar[contador]);
+            }
             contador++;
         }
         String nombreReceta = sb.toString();
+        this.nombreReceta=nombreReceta;
         etMedicamento.setText(nombreReceta);
     }
 
@@ -272,6 +289,7 @@ public class lectura_datos extends AppCompatActivity {
 
                     }
                 }
+                this.horas=horas;
                 etDuracionTrata.setText(horas + " dies");
             }
 

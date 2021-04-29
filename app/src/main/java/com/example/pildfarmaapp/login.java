@@ -22,12 +22,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class login extends AppCompatActivity {
 
@@ -45,6 +51,7 @@ public class login extends AppCompatActivity {
     private final int RC_SIGN_IN=9001;
 
     private SignInButton mButtonGoogle;
+    private FirebaseFirestore mFirestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,7 @@ public class login extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
+        mFirestore = FirebaseFirestore.getInstance();
 
         editEmail = findViewById(R.id.editText_login_correo);
         editContrasena = findViewById(R.id.editText_login_contrasena);
@@ -136,11 +144,10 @@ public class login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Intent intent = new Intent(login.this,aplicacion_base.class);
-                            startActivity(intent);
-                            Log.d("BIEN", "signInWithCredential:success");
-                            finish();
-                        } else {
+                            String id=mAuth.getCurrentUser().getUid();
+                            checkUserExist(id);
+                        }
+                        else {
                             // If sign in fails, display a message to the user.
                             Log.w("ERROR", "signInWithCredential:failure", task.getException());
                             Toast.makeText(login.this, "No se pudo iniciar sesión con Google",
@@ -148,6 +155,38 @@ public class login extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void checkUserExist(String id){
+        mFirestore.collection("Users").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    Intent intent = new Intent(login.this,aplicacion_base.class);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    String email=mAuth.getCurrentUser().getEmail();
+                    String userName=mAuth.getCurrentUser().getDisplayName();
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("Name",userName);
+                    map.put("Email",email);
+                    mFirestore.collection("Users").document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Intent intent = new Intent(login.this,aplicacion_base.class);
+                                startActivity(intent);
+                                finish();
+                            }else{
+                                Toast.makeText(login.this, "No se pudo almacenar la inforamción del usuario",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void loginUsuario(){

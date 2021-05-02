@@ -20,9 +20,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.UploadTask;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -30,11 +32,14 @@ import com.google.mlkit.vision.text.TextRecognizer;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 
 public class lectura_datos extends AppCompatActivity {
 
-    ImageView imageView;
+    ImageView imageView,mImage;
     Bitmap bitmap;
     TextRecognizer recognizer;
     EditText etMedicamento,etDosis,etFrecuencia,etViaAdmin,etDuracionTrata;
@@ -45,6 +50,8 @@ public class lectura_datos extends AppCompatActivity {
     Button guardar,aceptarVeri,cancelarVeri;
     AlertDialog.Builder dialogBuilder;
     AlertDialog dialog;
+    File mImageFile;
+    imageProvider mimageProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +59,7 @@ public class lectura_datos extends AppCompatActivity {
         setContentView(R.layout.activity_lectura_datos);
 
 
+        mimageProvider = new imageProvider();
         etMedicamento = findViewById(R.id.NombreMedicamento);
         etDosis = findViewById(R.id.Dosis);
         etFrecuencia = findViewById(R.id.Frecuencia);
@@ -135,9 +143,14 @@ public class lectura_datos extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 image_uri = result.getUri();
                 imageView.setImageURI(image_uri);
+                try {
+                    mImageFile = FileUtil.from(this,image_uri);
+                    saveImage();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 BitmapDrawable bitmapDrawable = (BitmapDrawable)imageView.getDrawable();
                 bitmap = bitmapDrawable.getBitmap();
-
                 Log.i("TAG", "Result->" + bitmap);
                 InputImage image = InputImage.fromBitmap(bitmap, 0);
                 recognizer = TextRecognition.getClient();
@@ -165,6 +178,20 @@ public class lectura_datos extends AppCompatActivity {
                 Exception error = result.getError();
             }
         }
+    }
+
+
+    private void saveImage(){
+        mimageProvider.save(lectura_datos.this, mImageFile).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if(task.isSuccessful()){
+
+                }else{
+
+                }
+            }
+        });
     }
 
     private void encontrarNombre(){

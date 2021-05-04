@@ -46,12 +46,21 @@ public class login extends AppCompatActivity {
     private EditText editContrasena;
 
 
-    private FirebaseAuth mAuth;
+    private static FirebaseAuth mAuth;
+
+    public FirebaseAuth getmAuth() {
+        return mAuth;
+    }
+
     private GoogleSignInClient mGoogleSignInClient;
     private final int RC_SIGN_IN=9001;
 
     private SignInButton mButtonGoogle;
     private FirebaseFirestore mFirestore;
+
+    public login(){
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

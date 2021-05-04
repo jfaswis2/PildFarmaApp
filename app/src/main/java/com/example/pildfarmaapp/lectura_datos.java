@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -51,6 +52,7 @@ public class lectura_datos extends AppCompatActivity {
     AlertDialog.Builder dialogBuilder;
     AlertDialog dialog;
     File mImageFile;
+    PostProvider mPostProvider;
     imageProvider mimageProvider;
 
     @Override
@@ -58,7 +60,7 @@ public class lectura_datos extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lectura_datos);
 
-
+        mPostProvider = new PostProvider();
         mimageProvider = new imageProvider();
         etMedicamento = findViewById(R.id.NombreMedicamento);
         etDosis = findViewById(R.id.Dosis);
@@ -112,9 +114,23 @@ public class lectura_datos extends AppCompatActivity {
         aceptarVeri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                guardarDatosFireBaseReceta();
             }
         });
+    }
+
+    private void guardarDatosFireBaseReceta(){
+        String Nombre= etMedicamento.getText().toString();
+        String Dosis=etDosis.getText().toString();
+        String Frecuencia=etFrecuencia.getText().toString();
+        String ViaAdministracion=etViaAdmin.getText().toString();
+        String Duracion=etDuracionTrata.getText().toString();
+        try {
+            mImageFile = FileUtil.from(this,image_uri);
+            saveImage(Nombre,Dosis,Frecuencia,ViaAdministracion,Duracion);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private String CalculoFecha(){
@@ -143,12 +159,6 @@ public class lectura_datos extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 image_uri = result.getUri();
                 imageView.setImageURI(image_uri);
-                try {
-                    mImageFile = FileUtil.from(this,image_uri);
-                    saveImage();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 BitmapDrawable bitmapDrawable = (BitmapDrawable)imageView.getDrawable();
                 bitmap = bitmapDrawable.getBitmap();
                 Log.i("TAG", "Result->" + bitmap);
@@ -181,12 +191,39 @@ public class lectura_datos extends AppCompatActivity {
     }
 
 
-    private void saveImage(){
+    private void saveImage(String Nombre, String Dosis, String Frecuencia, String ViaAdmin, String DuracionTrata){
         mimageProvider.save(lectura_datos.this, mImageFile).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                 if(task.isSuccessful()){
-
+                    mimageProvider.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            login login = new login();
+                            String url = uri.toString();
+                            DatosAlarma post = new DatosAlarma();
+                            post.setImagen(url);
+                            post.setMedicamento(Nombre);
+                            post.setDosis(Dosis);
+                            post.setFrecuencia(Frecuencia);
+                            post.setViaAdministracion(ViaAdmin);
+                            post.setDuracionTratamiento(DuracionTrata);
+                            post.setIDUsuario(login.getmAuth().getCurrentUser().getUid());
+                            mPostProvider.save(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> taskSave) {
+                                    if(taskSave.isSuccessful()){
+                                        Toast.makeText(lectura_datos.this,"Si se pudo",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                    else{
+                                        Toast.makeText(lectura_datos.this,"No se pudo",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                        }
+                    });
                 }else{
 
                 }

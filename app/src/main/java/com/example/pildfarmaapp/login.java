@@ -1,6 +1,5 @@
 package com.example.pildfarmaapp;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +14,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pildfarmaapp.activities.RegisterActivity;
+import com.example.pildfarmaapp.models.User;
+import com.example.pildfarmaapp.providers.AuthProvider;
+import com.example.pildfarmaapp.providers.UsersProvider;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -41,37 +44,31 @@ public class login extends AppCompatActivity {
     private TextView bttn_text_crearcuenta;
     private TextView bttn_text_recuperarcontrasena;
     private Button bttn_entrar;
-
     private EditText editEmail;
     private EditText editContrasena;
 
-    private boolean cerrar = false;
-
-    private FirebaseAuth mAuth;
-
-    public FirebaseAuth getmAuth() {
-        return mAuth;
-    }
-
-    public void logout(){
-        if(mAuth!=null){
-            mAuth.signOut();
-        }
-    }
-
+    private AuthProvider mAuthProvider;
+    private SignInButton mButtonGoogle;
     private GoogleSignInClient mGoogleSignInClient;
+    private UsersProvider mUsersProvider;
+    private final int REQUEST_CODE_GOOGLE = 1;
+    private boolean Cerrar = false;
     private final int RC_SIGN_IN=9001;
 
-    private SignInButton mButtonGoogle;
-    private FirebaseFirestore mFirestore;
-
-    public login(){}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        editEmail = findViewById(R.id.editText_login_correo);
+        editContrasena = findViewById(R.id.editText_login_contrasena);
+        mButtonGoogle = findViewById(R.id.bttn_identificarse_google_aclogin);
+        bttn_text_crearcuenta = findViewById(R.id.bttntext_crear_cuenta_aclogin);
+        bttn_text_recuperarcontrasena = findViewById(R.id.bttntext_recuperar_contraseña_aclogin);
+        bttn_entrar = findViewById(R.id.bttn_entrar_aclogin);
+
+        mAuthProvider = new AuthProvider();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -79,12 +76,8 @@ public class login extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        mFirestore = FirebaseFirestore.getInstance();
+        mUsersProvider = new UsersProvider();
 
-        editEmail = findViewById(R.id.editText_login_correo);
-        editContrasena = findViewById(R.id.editText_login_contrasena);
-
-        mButtonGoogle = findViewById(R.id.bttn_identificarse_google_aclogin);
         mButtonGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,17 +86,15 @@ public class login extends AppCompatActivity {
         });
 
         //Tap en el texto CREAR CUENTA
-        bttn_text_crearcuenta = findViewById(R.id.bttntext_crear_cuenta_aclogin);
         bttn_text_crearcuenta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), register.class);
+                Intent intent = new Intent(v.getContext(), RegisterActivity.class);
                 startActivity(intent);
             }
         });
 
-        //Tap en el texto RECUPERAR CONTRASEÑA
-        bttn_text_recuperarcontrasena = findViewById(R.id.bttntext_recuperar_contraseña_aclogin);
+        //Tap en el texto RECUPERAR CONTRASEÑA//TODO
         bttn_text_recuperarcontrasena.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,22 +104,17 @@ public class login extends AppCompatActivity {
         });
 
 
-
-        bttn_entrar = findViewById(R.id.bttn_entrar_aclogin);
         bttn_entrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loginUsuario();
             }
         });
-
-
-
     }
 
     private void signGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        startActivityForResult(signInIntent, REQUEST_CODE_GOOGLE);
     }
 
     @Override
@@ -136,13 +122,12 @@ public class login extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == REQUEST_CODE_GOOGLE) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                Log.d("BIEN", "firebaseAuthWithGoogle:" + account.getId());
-                firebaseAuthWithGoogle(account.getIdToken());
+                firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w("ERROR", "Google sign in failed", e);
@@ -150,8 +135,8 @@ public class login extends AppCompatActivity {
         }
     }
 
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        /*AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth = FirebaseAuth.getInstance();
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -168,11 +153,24 @@ public class login extends AppCompatActivity {
                                     Toast.LENGTH_LONG).show();
                         }
                     }
-                });
+                });*/
+        mAuthProvider.googleLogin(acct).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    String id = mAuthProvider.getUid();
+                    checkUserExist(id);
+                }
+                else {
+                    Log.w("ERROR", "signInWithCredential:failure", task.getException());
+                    Toast.makeText(login.this, "No se pudo iniciar sesión con Google", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void checkUserExist(String id){
-        mFirestore.collection("Users").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        /*mFirestore.collection("Users").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()){
@@ -200,6 +198,35 @@ public class login extends AppCompatActivity {
                     });
                 }
             }
+        });*/
+        mUsersProvider.getUser(id).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    Intent intent = new Intent(login.this, aplicacion_base.class);
+                    startActivity(intent);
+                }
+                else {
+                    String email = mAuthProvider.getEmail();
+                    String username = mAuthProvider.getName();
+                    User user = new User();
+                    user.setEmail(email);
+                    user.setId(id);
+                    user.setUsername(username);
+                    mUsersProvider.create(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                Intent intent = new Intent(login.this, aplicacion_base.class);
+                                startActivity(intent);
+                            }
+                            else {
+                                Toast.makeText(login.this, "No se pudo almacenar la información del usuario", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            }
         });
     }
 
@@ -207,19 +234,21 @@ public class login extends AppCompatActivity {
         String email = editEmail.getText().toString();
         String password = editContrasena.getText().toString();
 
-        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuthProvider.login(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Intent intent = new Intent(login.this,aplicacion_base.class);
+                    Intent intent = new Intent(login.this, aplicacion_base.class);
                     startActivity(intent);
                     finish();
-                }else{
-                    Toast.makeText(login.this, "El email o la contraseña que ingresaste no son correctas",
-                            Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(login.this, "El email y/o la contraseña no son correctas", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+        Log.d("CAMPO", "email: " + email);
+        Log.d("CAMPO", "password: " + password);
     }
 
     @Override
@@ -231,16 +260,16 @@ public class login extends AppCompatActivity {
         builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                cerrar = true;
-                salirApp(cerrar);
+                Cerrar = true;
+                salirApp(Cerrar);
             }
         });
 
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                cerrar = false;
-                salirApp(cerrar);
+                Cerrar = false;
+                salirApp(Cerrar);
             }
         });
 
@@ -249,7 +278,7 @@ public class login extends AppCompatActivity {
     }
 
     private void salirApp(boolean cerrrar){
-        if (cerrar == true){
+        if (Cerrar == true){
             Toast.makeText(this,"Vuelve pronto",Toast.LENGTH_SHORT).show();
             super.onBackPressed();
         }else{
@@ -257,24 +286,8 @@ public class login extends AppCompatActivity {
         }
     }
 
-    public FirebaseUser getUserSession(){
-        if(mAuth.getCurrentUser() != null){
-            return mAuth.getCurrentUser();
-        }
-        else{
-            return null;
-        }
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
-        if(getUserSession() != null){
-            Intent intent = new Intent(login.this,aplicacion_base.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }else{
-            
-        }
     }
 }

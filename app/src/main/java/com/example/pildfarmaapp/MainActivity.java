@@ -16,12 +16,16 @@ public class MainActivity extends AppCompatActivity {
     Button button1;
     Button button2;
 
+    login mAuthProvider;
+
     private boolean cerrar = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAuthProvider = new login();
 
         //Tap en el boton de CREAR CUENTA
         button1 = findViewById(R.id.bttn_crear_cuenta_acmain);
@@ -44,6 +48,16 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mAuthProvider.getUserSession() != null){
+            Intent intent = new Intent(MainActivity.this,aplicacion_base.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
     }
 
     @Override

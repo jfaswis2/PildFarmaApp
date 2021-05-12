@@ -77,6 +77,12 @@ public class aplicacion_base extends AppCompatActivity {
                         case R.id.historial:
                             selectedFragment = new Historial_Fragment();
                             break;
+                        case R.id.perfil:
+                            selectedFragment = new perfil_fragment();
+                            break;
+                        case R.id.ajustes:
+                            selectedFragment = new ajustes_fragment();
+                            break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             selectedFragment).commit();

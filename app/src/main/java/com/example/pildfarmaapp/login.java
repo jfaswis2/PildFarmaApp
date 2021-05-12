@@ -45,11 +45,18 @@ public class login extends AppCompatActivity {
     private EditText editEmail;
     private EditText editContrasena;
 
+    private boolean cerrar = false;
 
-    private static FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
 
     public FirebaseAuth getmAuth() {
         return mAuth;
+    }
+
+    public void logout(){
+        if(mAuth!=null){
+            mAuth.signOut();
+        }
     }
 
     private GoogleSignInClient mGoogleSignInClient;
@@ -58,9 +65,7 @@ public class login extends AppCompatActivity {
     private SignInButton mButtonGoogle;
     private FirebaseFirestore mFirestore;
 
-    public login(){
-
-    }
+    public login(){}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +79,6 @@ public class login extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
 
         editEmail = findViewById(R.id.editText_login_correo);
@@ -148,6 +152,7 @@ public class login extends AppCompatActivity {
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth = FirebaseAuth.getInstance();
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -219,8 +224,57 @@ public class login extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
-        finish();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("SALIR");
+        builder.setMessage("¿Estas seguro que deseas salir de la aplicación?");
+
+        builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                cerrar = true;
+                salirApp(cerrar);
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                cerrar = false;
+                salirApp(cerrar);
+            }
+        });
+
+        builder.create();
+        builder.show();
+    }
+
+    private void salirApp(boolean cerrrar){
+        if (cerrar == true){
+            Toast.makeText(this,"Vuelve pronto",Toast.LENGTH_SHORT).show();
+            super.onBackPressed();
+        }else{
+            Toast.makeText(this,"Gracias por seguir aquí",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public FirebaseUser getUserSession(){
+        if(mAuth.getCurrentUser() != null){
+            return mAuth.getCurrentUser();
+        }
+        else{
+            return null;
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(getUserSession() != null){
+            Intent intent = new Intent(login.this,aplicacion_base.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }else{
+            
+        }
     }
 }

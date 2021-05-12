@@ -65,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
     <Button
-        android:id="@+id/bttn_aceptar_verificacion"
+        android:id="@+id/bttn_aceptar_cerrar_sesion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -75,12 +75,12 @@
         android:text="Aceptar"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintEnd_toStartOf="@+id/bttn_cancelar_verificacion"
+        app:layout_constraintEnd_toStartOf="@+id/bttn_cancelar_cerrar_sesion"
         app:layout_constraintStart_toStartOf="@+id/intervalo_fechas_verfificacion"
         app:layout_constraintTop_toBottomOf="@+id/intervalo_fechas_verfificacion" />
 
     <Button
-        android:id="@+id/bttn_cancelar_verificacion"
+        android:id="@+id/bttn_cancelar_cerrar_sesion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -91,7 +91,7 @@
         android:textColor="@color/azul"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="@+id/intervalo_fechas_verfificacion"
-        app:layout_constraintStart_toEndOf="@+id/bttn_aceptar_verificacion"
+        app:layout_constraintStart_toEndOf="@+id/bttn_aceptar_cerrar_sesion"
         app:layout_constraintTop_toBottomOf="@+id/intervalo_fechas_verfificacion" />
 
     <androidx.constraintlayout.widget.Guideline

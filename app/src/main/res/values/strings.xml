@@ -18,7 +18,7 @@
     <string name="login_recuperar_contrasena">Recuperar contraseña</string>
     <string name="mensaje_recuperar_contrasena">No te preocupes, esto pasa mas veces de lo que te imaginas</string>
     <string name="mensaje2_recuperar_constrasena">Escribe tu correo electronico, por favor:</string>
-    <string name="base_inicio">Inicio</string>
+    <string name="base_inicio">Alarmas</string>
     <string name="base_historial">Historial</string>
     <string name="base_perfil">Perfil</string>
     <string name="base_ajustes">Ajustes</string>

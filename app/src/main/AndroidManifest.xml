@@ -16,9 +16,8 @@
         <activity android:name=".Prueba" />
         <activity android:name=".aplicacion_base" />
         <activity android:name=".register" />
-        <activity android:name=".login" />
         <activity android:name=".password_reset" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

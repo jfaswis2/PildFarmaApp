@@ -7,15 +7,13 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-public class Historial_Fragment extends Fragment {
-
+public class perfil_fragment extends Fragment {
     View mView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_historial_alarmas, container, false);
+        mView = inflater.inflate(R.layout.fragment_perfil, container, false);
         return mView;
     }
-
-
 }

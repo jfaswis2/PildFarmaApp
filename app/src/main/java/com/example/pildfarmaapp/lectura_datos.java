@@ -1,18 +1,15 @@
 package com.example.pildfarmaapp;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -97,8 +94,8 @@ public class lectura_datos extends AppCompatActivity {
         NombreVerificacion.setText(nombreReceta);
         IntervaloFechas = (TextView) contactPopupView.findViewById(R.id.intervalo_fechas_verfificacion);
         IntervaloFechas.setText(CalculoFecha());
-        aceptarVeri = (Button) contactPopupView.findViewById(R.id.bttn_aceptar_verificacion);
-        cancelarVeri = (Button) contactPopupView.findViewById(R.id.bttn_cancelar_verificacion);
+        aceptarVeri = (Button) contactPopupView.findViewById(R.id.bttn_aceptar_cerrar_sesion);
+        cancelarVeri = (Button) contactPopupView.findViewById(R.id.bttn_cancelar_cerrar_sesion);
 
         dialogBuilder.setView(contactPopupView);
         dialog = dialogBuilder.create();

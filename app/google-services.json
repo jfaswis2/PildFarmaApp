@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "790694917723",
+    "firebase_url": "https://pildfarmaapp-76a6b-default-rtdb.firebaseio.com",
     "project_id": "pildfarmaapp-76a6b",
     "storage_bucket": "pildfarmaapp-76a6b.appspot.com"
   },
@@ -13,6 +14,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "790694917723-m6dhk592rrdgrlnlp0dqggqjtfdl567h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pildfarmaapp",
+            "certificate_hash": "f4431ad842f75fc758111d187a2efe1ef310ebac"
+          }
+        },
+        {
+          "client_id": "790694917723-sidqpfcef8fldcchkjh23vai40ph8340.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pildfarmaapp",
+            "certificate_hash": "4e7037ae4d02eae1ed21981b677b319c8dde5ceb"
+          }
+        },
         {
           "client_id": "790694917723-d55o6qr4nkmkch985qbhkvopokqakfko.apps.googleusercontent.com",
           "client_type": 3

@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.pildfarmaapp.activities.LoginActivity;
+
 public class password_reset extends AppCompatActivity {
 
     TextView textView;
@@ -21,7 +23,7 @@ public class password_reset extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), login.class);
+                Intent intent = new Intent(v.getContext(), LoginActivity.class);
                 startActivity(intent);
             }
         });
@@ -29,7 +31,7 @@ public class password_reset extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this,login.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

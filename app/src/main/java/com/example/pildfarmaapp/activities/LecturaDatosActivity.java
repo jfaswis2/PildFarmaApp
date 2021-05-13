@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pildfarmaapp.activities.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -196,7 +197,7 @@ public class lectura_datos extends AppCompatActivity {
                     mimageProvider.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            login login = new login();
+                            LoginActivity login = new LoginActivity();
                             String url = uri.toString();
                             DatosAlarma post = new DatosAlarma();
                             post.setImagen(url);

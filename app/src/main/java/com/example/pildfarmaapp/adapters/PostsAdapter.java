@@ -35,7 +35,7 @@ public class PostsAdapter extends FirestoreRecyclerAdapter<PostAlarma, PostsAdap
         holder.textViewEstad.setText(post.getEstado());
         if(holder.textViewEstad.getText().toString().equals("Activo")){
             holder.textViewEstad.setTextColor(Color.parseColor("#00FF00"));
-        }else if(holder.textViewEstad.getText().toString().equals("Inactivo")){
+        }else if(holder.textViewEstad.getText().toString().equals("Finalizado")){
             holder.textViewEstad.setTextColor(Color.parseColor("#FF0000"));
         }
 

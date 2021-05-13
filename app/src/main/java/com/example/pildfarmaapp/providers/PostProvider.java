@@ -20,10 +20,15 @@ public class PostProvider {
         return mCollection.document().set(post);
     }
 
+    public Query getFinalizados(){
+        Query Medicamentos = mCollection.whereEqualTo("idusuario", mAuthProvider.getUid()).whereEqualTo("estado", "Finalizado");
+        return Medicamentos;
+    }
+
     public Query getAll(){
 
-        Query Medicamentos = mCollection.whereEqualTo("idusuario", mAuthProvider.getUid());
+        Query Medicamentos = mCollection.whereEqualTo("idusuario", mAuthProvider.getUid()).whereEqualTo("estado", "Activo");
 
-       return mCollection.whereEqualTo("estado", "Activo").whereEqualTo("idusuario", mAuthProvider.getUserSession());
+       return Medicamentos;
     }
 }

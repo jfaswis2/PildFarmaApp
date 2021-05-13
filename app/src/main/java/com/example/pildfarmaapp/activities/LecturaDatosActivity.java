@@ -214,6 +214,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
                             post.setViaAdministracion(ViaAdmin);
                             post.setDuracionTratamiento(DuracionTrata);
                             post.setIDUsuario(mAuthProvider.getUid());
+                            post.setEstado("Activo");
                             mPostProvider.save(post).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> taskSave) {

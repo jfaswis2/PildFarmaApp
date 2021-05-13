@@ -1,4 +1,4 @@
-package com.example.pildfarmaapp;
+package com.example.pildfarmaapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pildfarmaapp.activities.RegisterActivity;
+import com.example.pildfarmaapp.R;
 import com.example.pildfarmaapp.models.User;
 import com.example.pildfarmaapp.providers.AuthProvider;
 import com.example.pildfarmaapp.providers.UsersProvider;
@@ -27,18 +27,10 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
 
     private TextView bttn_text_crearcuenta;
@@ -98,7 +90,7 @@ public class login extends AppCompatActivity {
         bttn_text_recuperarcontrasena.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), password_reset.class);
+                Intent intent = new Intent(v.getContext(), RecuperarContrasenaActivity.class);
                 startActivity(intent);
             }
         });
@@ -163,7 +155,7 @@ public class login extends AppCompatActivity {
                 }
                 else {
                     Log.w("ERROR", "signInWithCredential:failure", task.getException());
-                    Toast.makeText(login.this, "No se pudo iniciar sesión con Google", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "No se pudo iniciar sesión con Google", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -203,7 +195,7 @@ public class login extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()){
-                    Intent intent = new Intent(login.this, aplicacion_base.class);
+                    Intent intent = new Intent(LoginActivity.this, AplicacionBaseActivity.class);
                     startActivity(intent);
                 }
                 else {
@@ -217,11 +209,11 @@ public class login extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()){
-                                Intent intent = new Intent(login.this, aplicacion_base.class);
+                                Intent intent = new Intent(LoginActivity.this, AplicacionBaseActivity.class);
                                 startActivity(intent);
                             }
                             else {
-                                Toast.makeText(login.this, "No se pudo almacenar la información del usuario", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "No se pudo almacenar la información del usuario", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -238,12 +230,12 @@ public class login extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Intent intent = new Intent(login.this, aplicacion_base.class);
+                    Intent intent = new Intent(LoginActivity.this, AplicacionBaseActivity.class);
                     startActivity(intent);
                     finish();
                 }
                 else {
-                    Toast.makeText(login.this, "El email y/o la contraseña no son correctas", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "El email y/o la contraseña no son correctas", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -253,7 +245,7 @@ public class login extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_NoActionBar);
         builder.setTitle("SALIR");
         builder.setMessage("¿Estas seguro que deseas salir de la aplicación?");
 
@@ -289,5 +281,10 @@ public class login extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        if(mAuthProvider.getUserSession() != null){
+            Intent intent = new Intent (LoginActivity.this, AplicacionBaseActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
     }
 }

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.example.pildfarmaapp.Alarmas_Activas_Fragment"
+        android:name="com.example.pildfarmaapp.fragments.AlarmasActivasFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_alarmas">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.example.pildfarmaapp.Historial_Fragment"
+        android:name="com.example.pildfarmaapp.fragments.HistorialFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_historial_alarmas">
 

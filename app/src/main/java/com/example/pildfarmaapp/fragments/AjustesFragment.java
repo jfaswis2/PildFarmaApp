@@ -1,4 +1,4 @@
-package com.example.pildfarmaapp;
+package com.example.pildfarmaapp.fragments;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -11,10 +11,14 @@ import android.widget.Button;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-public class ajustes_fragment extends Fragment {
+import com.example.pildfarmaapp.R;
+import com.example.pildfarmaapp.activities.LoginActivity;
+import com.example.pildfarmaapp.providers.AuthProvider;
+
+public class AjustesFragment extends Fragment {
     View mView;
     CardView cardView;
-    login MAuthlogin;
+    AuthProvider MAuthlogin;
     AlertDialog.Builder dialogBuilder;
     AlertDialog dialog;
     Button aceptar,cancelar;
@@ -24,7 +28,7 @@ public class ajustes_fragment extends Fragment {
 
         mView = inflater.inflate(R.layout.fragment_ajustes, container, false);
         cardView = mView.findViewById(R.id.cardViewCerrarSesion);
-        MAuthlogin = new login();
+        MAuthlogin = new AuthProvider();
 
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,10 +70,8 @@ public class ajustes_fragment extends Fragment {
 
     private void logout(){
         MAuthlogin.logout();
-        Intent intent = new Intent(getContext(),login.class);
+        Intent intent = new Intent(getContext(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
-
-
 }

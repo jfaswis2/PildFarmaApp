@@ -12,20 +12,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pildfarmaapp.MainActivity;
 import com.example.pildfarmaapp.R;
-import com.example.pildfarmaapp.login;
 import com.example.pildfarmaapp.models.User;
 import com.example.pildfarmaapp.providers.AuthProvider;
 import com.example.pildfarmaapp.providers.UsersProvider;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -74,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
         iniciar_sesion_acregister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), login.class);
+                Intent intent = new Intent(v.getContext(), LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -128,7 +122,8 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
-                                Intent intent = new Intent(RegisterActivity.this, login.class);
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                mAuthProvider.logout();
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                             }else{
@@ -154,7 +149,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, login.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

@@ -1,4 +1,4 @@
-package com.example.pildfarmaapp;
+package com.example.pildfarmaapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,9 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.pildfarmaapp.R;
 import com.example.pildfarmaapp.activities.LoginActivity;
 
-public class password_reset extends AppCompatActivity {
+public class RecuperarContrasenaActivity extends AppCompatActivity {
 
     TextView textView;
 

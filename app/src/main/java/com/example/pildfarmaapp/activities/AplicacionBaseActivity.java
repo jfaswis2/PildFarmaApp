@@ -1,7 +1,6 @@
-package com.example.pildfarmaapp;
+package com.example.pildfarmaapp.activities;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -10,20 +9,20 @@ import androidx.fragment.app.Fragment;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.google.android.material.bottomappbar.BottomAppBar;
+import com.example.pildfarmaapp.R;
+import com.example.pildfarmaapp.fragments.AlarmasActivasFragment;
+import com.example.pildfarmaapp.fragments.HistorialFragment;
+import com.example.pildfarmaapp.fragments.AjustesFragment;
+import com.example.pildfarmaapp.fragments.PerfilFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class aplicacion_base extends AppCompatActivity {
+public class AplicacionBaseActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
     FloatingActionButton floatingActionButton;
@@ -34,9 +33,9 @@ public class aplicacion_base extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aplicacion_base);
 
-        if (ContextCompat.checkSelfPermission(aplicacion_base.this,
+        if (ContextCompat.checkSelfPermission(AplicacionBaseActivity.this,
                 Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(aplicacion_base.this,
+            ActivityCompat.requestPermissions(AplicacionBaseActivity.this,
                     new String[]{
                             Manifest.permission.CAMERA
                     },100);
@@ -44,7 +43,7 @@ public class aplicacion_base extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Alarmas_Activas_Fragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AlarmasActivasFragment()).commit();
 
         bottomNavigationView.setBackground(null);
         bottomNavigationView.getMenu().getItem(2).setEnabled(false);
@@ -57,7 +56,7 @@ public class aplicacion_base extends AppCompatActivity {
                 /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 Bitmap captureImage = (Bitmap) intent.getExtras().get("data");
                 intent.putExtra("imagen",captureImage);*/
-                Intent intent = new Intent(aplicacion_base.this,lectura_datos.class);
+                Intent intent = new Intent(AplicacionBaseActivity.this, LecturaDatosActivity.class);
                 startActivity(intent);
 
             }
@@ -72,16 +71,16 @@ public class aplicacion_base extends AppCompatActivity {
 
                     switch (item.getItemId()){
                         case R.id.home:
-                            selectedFragment = new Alarmas_Activas_Fragment();
+                            selectedFragment = new AlarmasActivasFragment();
                             break;
                         case R.id.historial:
-                            selectedFragment = new Historial_Fragment();
+                            selectedFragment = new HistorialFragment();
                             break;
                         case R.id.perfil:
-                            selectedFragment = new perfil_fragment();
+                            selectedFragment = new PerfilFragment();
                             break;
                         case R.id.ajustes:
-                            selectedFragment = new ajustes_fragment();
+                            selectedFragment = new AjustesFragment();
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,

@@ -1,4 +1,4 @@
-package com.example.pildfarmaapp;
+package com.example.pildfarmaapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +18,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pildfarmaapp.activities.LoginActivity;
+import com.example.pildfarmaapp.R;
+import com.example.pildfarmaapp.models.PostAlarma;
+import com.example.pildfarmaapp.providers.AuthProvider;
+import com.example.pildfarmaapp.providers.ImageProvider;
+import com.example.pildfarmaapp.providers.PostProvider;
+import com.example.pildfarmaapp.utils.FileUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,9 +41,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 
-public class lectura_datos extends AppCompatActivity {
+public class LecturaDatosActivity extends AppCompatActivity {
 
-    ImageView imageView,mImage;
+    ImageView imageView;
     Bitmap bitmap;
     TextRecognizer recognizer;
     EditText etMedicamento,etDosis,etFrecuencia,etViaAdmin,etDuracionTrata;
@@ -51,15 +56,17 @@ public class lectura_datos extends AppCompatActivity {
     AlertDialog dialog;
     File mImageFile;
     PostProvider mPostProvider;
-    imageProvider mimageProvider;
+    ImageProvider mimageProvider;
+    AuthProvider mAuthProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lectura_datos);
 
+        mAuthProvider = new AuthProvider();
         mPostProvider = new PostProvider();
-        mimageProvider = new imageProvider();
+        mimageProvider = new ImageProvider();
         etMedicamento = findViewById(R.id.NombreMedicamento);
         etDosis = findViewById(R.id.Dosis);
         etFrecuencia = findViewById(R.id.Frecuencia);
@@ -190,7 +197,7 @@ public class lectura_datos extends AppCompatActivity {
 
 
     private void saveImage(String Nombre, String Dosis, String Frecuencia, String ViaAdmin, String DuracionTrata){
-        mimageProvider.save(lectura_datos.this, mImageFile).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+        mimageProvider.save(LecturaDatosActivity.this, mImageFile).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                 if(task.isSuccessful()){
@@ -199,23 +206,26 @@ public class lectura_datos extends AppCompatActivity {
                         public void onSuccess(Uri uri) {
                             LoginActivity login = new LoginActivity();
                             String url = uri.toString();
-                            DatosAlarma post = new DatosAlarma();
+                            PostAlarma post = new PostAlarma();
                             post.setImagen(url);
                             post.setMedicamento(Nombre);
                             post.setDosis(Dosis);
                             post.setFrecuencia(Frecuencia);
                             post.setViaAdministracion(ViaAdmin);
                             post.setDuracionTratamiento(DuracionTrata);
-                            post.setIDUsuario(login.getmAuth().getCurrentUser().getUid());
+                            post.setIDUsuario(mAuthProvider.getUid());
                             mPostProvider.save(post).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> taskSave) {
                                     if(taskSave.isSuccessful()){
-                                        Toast.makeText(lectura_datos.this,"Si se pudo",
+                                        Toast.makeText(LecturaDatosActivity.this,"La información se almacenó correctamente",
                                                 Toast.LENGTH_LONG).show();
+                                        Intent intent = new Intent(LecturaDatosActivity.this, AplicacionBaseActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
                                     }
                                     else{
-                                        Toast.makeText(lectura_datos.this,"No se pudo",
+                                        Toast.makeText(LecturaDatosActivity.this,"No se pudo almacenar la información",
                                                 Toast.LENGTH_LONG).show();
                                     }
                                 }
@@ -223,7 +233,7 @@ public class lectura_datos extends AppCompatActivity {
                         }
                     });
                 }else{
-
+                    Toast.makeText(LecturaDatosActivity.this, "Hubo un error al almacenar la imagen", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -1,4 +1,4 @@
-package com.example.pildfarmaapp;
+package com.example.pildfarmaapp.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-public class Historial_Fragment extends Fragment {
+import com.example.pildfarmaapp.R;
+
+public class HistorialFragment extends Fragment {
 
     View mView;
     @Override

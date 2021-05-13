@@ -2,7 +2,7 @@ package com.example.pildfarmaapp.providers;
 
 import android.content.Context;
 
-import com.example.pildfarmaapp.CompressorBitmapImage;
+import com.example.pildfarmaapp.utils.CompressorBitmapImage;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;

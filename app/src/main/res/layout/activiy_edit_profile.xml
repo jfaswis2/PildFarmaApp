@@ -33,7 +33,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
@@ -52,11 +52,13 @@
                     android:layout_width="150dp"
                     android:layout_height="90dp"
                     app:cardCornerRadius="6dp"
-                    app:cardElevation="0dp">
+                    app:cardElevation="0dp"
+                    android:backgroundTint="@color/white">
 
                     <ImageView
                         android:layout_width="150dp"
                         android:layout_height="90dp"
+                        android:src="@drawable/ic_add_photo_black"
                         android:scaleType="fitCenter"/>
 
                 </androidx.cardview.widget.CardView>
@@ -85,6 +87,7 @@
                             android:layout_height="wrap_content"
                             android:text="Datos personales"
                             android:textSize="17sp"
+                            android:textColor="@color/black"
                             android:textStyle="bold" />
 
                         <Space
@@ -114,6 +117,7 @@
                                 android:src="@drawable/ic_person_black" />
 
                             <EditText
+                                android:id="@+id/EditNombre"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
@@ -138,13 +142,13 @@
                                 android:src="@drawable/ic_cake_black" />
 
                             <EditText
+                                android:id="@+id/EditNacimiento"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="57dp"
                                 android:layout_marginLeft="20dp"
                                 android:text="02/03/1997"
-                                android:textSize="15sp"
                                 android:textColor="@color/black"
-                                />
+                                android:textSize="15sp" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -162,6 +166,7 @@
                                 android:src="@drawable/ic_hospital_black" />
 
                             <EditText
+                                android:id="@+id/EditCap"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
@@ -186,6 +191,7 @@
                                 android:src="@drawable/ic_phone_black" />
 
                             <EditText
+                                android:id="@+id/EditTelefono"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
@@ -208,11 +214,11 @@
                 android:text="Actualizar"
                 android:fontFamily="sans-serif-medium"
                 android:textSize="16dp"
+                android:textColor="@color/black"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/borde_redondo_boton2"/>
 
         </LinearLayout>
-
 
     </ScrollView>
 

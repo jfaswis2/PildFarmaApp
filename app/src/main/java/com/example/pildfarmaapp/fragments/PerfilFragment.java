@@ -22,9 +22,9 @@ public class PerfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //Asignación de variables
-        textView = mView.findViewById(R.id.tv_editar);
         mView = inflater.inflate(R.layout.fragment_perfil, container, false);
 
+        textView = mView.findViewById(R.id.tv_editar);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

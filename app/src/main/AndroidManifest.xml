@@ -14,6 +14,7 @@
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity android:name=".activities.LecturaDatosActivity"></activity>
         <activity android:name=".activities.AplicacionBaseActivity" />
+        <activity android:name=".activities.EditProfileActivity" />
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.RecuperarContrasenaActivity" />
         <activity android:name=".activities.LoginActivity">

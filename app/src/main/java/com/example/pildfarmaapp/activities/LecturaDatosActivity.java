@@ -43,6 +43,7 @@ import java.util.Calendar;
 
 public class LecturaDatosActivity extends AppCompatActivity {
 
+    //Declaración de variables
     ImageView imageView;
     Bitmap bitmap;
     TextRecognizer recognizer;
@@ -64,6 +65,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lectura_datos);
 
+        //Asiganción de variables
         mAuthProvider = new AuthProvider();
         mPostProvider = new PostProvider();
         mimageProvider = new ImageProvider();
@@ -95,6 +97,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
     }
 
 
+    //Confirmacion del guardado de la receta
     private void newConfirmDialog(){
         dialogBuilder = new AlertDialog.Builder(this);
         final View contactPopupView = getLayoutInflater().inflate(R.layout.fragment_verificacion,null);
@@ -138,6 +141,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
         }
     }
 
+    //Se calcula la fecha de inicio y fin de la toma del medicamento
     private String CalculoFecha(){
         String intervalo;
 
@@ -149,6 +153,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
         return intervalo;
     }
 
+    //Se asignan las lineas guias de la foto
     private void startCropActivity(){
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
@@ -156,6 +161,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
     }
 
 
+    //Se hace uso del OCR para reconocer el texto e identificar los datos que necesitamos
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -196,6 +202,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
     }
 
 
+    //Se guarda la foto del usuario en la base de datos
     private void saveImage(String Nombre, String Dosis, String Frecuencia, String ViaAdmin, String DuracionTrata){
         mimageProvider.save(LecturaDatosActivity.this, mImageFile).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -240,6 +247,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
         });
     }
 
+    //Algortimo para encontrar el nombre del medicamento
     private void encontrarNombre(){
         int contador=0;
         StringBuilder sb = new StringBuilder();
@@ -254,6 +262,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
         etMedicamento.setText(nombreReceta);
     }
 
+    //Algortimo para encontrar la dosis del medicamento
     private void encontrarDosis(){
         if(resultadoTexto.contains("Inhalació")){
             int posicion=resultadoTexto.indexOf("Inhalació");
@@ -312,6 +321,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
         }
     }
 
+    //Algortimo para encontrar la frecuencia del medicamento
     private void encontrarFrecuecia(){
         if(resultadoTexto.contains("Hores")){
             int posicion=resultadoTexto.indexOf("Hores");
@@ -331,6 +341,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
         }
     }
 
+    //Algortimo para encontrar la via de administración del medicamento
     private void encontrarViaAdministracion(){
         if(resultadoTexto.contains("pulmonar")){
             etViaAdmin.setText("Via pulmonar");
@@ -339,6 +350,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
         }
     }
 
+    //Algortimo para encontrar la duración del tratamiento
     private void encontrarDuracionTrata(){
         if(resultadoTexto.contains("dies")) {
             int posicion = resultadoTexto.indexOf("dies");

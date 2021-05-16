@@ -32,7 +32,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 public class LoginActivity extends AppCompatActivity {
 
-
+    //Declaración de variables
     private TextView bttn_text_crearcuenta;
     private TextView bttn_text_recuperarcontrasena;
     private Button bttn_entrar;
@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //Asignación de variables
         editEmail = findViewById(R.id.editText_login_correo);
         editContrasena = findViewById(R.id.editText_login_contrasena);
         mButtonGoogle = findViewById(R.id.bttn_identificarse_google_aclogin);
@@ -109,15 +110,13 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, REQUEST_CODE_GOOGLE);
     }
 
+    //Login con google
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == REQUEST_CODE_GOOGLE) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
@@ -127,25 +126,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    //Login con google
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        /*AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth = FirebaseAuth.getInstance();
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            String id=mAuth.getCurrentUser().getUid();
-                            checkUserExist(id);
-                        }
-                        else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("ERROR", "signInWithCredential:failure", task.getException());
-                            Toast.makeText(login.this, "No se pudo iniciar sesión con Google",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });*/
         mAuthProvider.googleLogin(acct).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -161,36 +143,8 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //Comprueba si el usuario existe, si no lo registra
     private void checkUserExist(String id){
-        /*mFirestore.collection("Users").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    Intent intent = new Intent(login.this,aplicacion_base.class);
-                    startActivity(intent);
-                    finish();
-                }else{
-                    String email=mAuth.getCurrentUser().getEmail();
-                    String userName=mAuth.getCurrentUser().getDisplayName();
-                    Map<String,Object> map = new HashMap<>();
-                    map.put("Name",userName);
-                    map.put("Email",email);
-                    mFirestore.collection("Users").document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                Intent intent = new Intent(login.this,aplicacion_base.class);
-                                startActivity(intent);
-                                finish();
-                            }else{
-                                Toast.makeText(login.this, "No se pudo almacenar la inforamción del usuario",
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                }
-            }
-        });*/
         mUsersProvider.getUser(id).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -222,6 +176,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //Login de usuario
     private void loginUsuario(){
         String email = editEmail.getText().toString();
         String password = editContrasena.getText().toString();
@@ -243,6 +198,8 @@ public class LoginActivity extends AppCompatActivity {
         Log.d("CAMPO", "password: " + password);
     }
 
+
+    //Acción del boton hacia atras
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_NoActionBar);
@@ -278,6 +235,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    //Comprueba si el usuario ya tiene una sesión iniciada
     @Override
     protected void onStart() {
         super.onStart();

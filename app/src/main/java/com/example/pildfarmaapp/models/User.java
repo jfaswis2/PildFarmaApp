@@ -1,5 +1,6 @@
 package com.example.pildfarmaapp.models;
 
+//Clase con los datos del usuario
 public class User {
 
     private String id;

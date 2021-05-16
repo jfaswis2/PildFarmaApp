@@ -19,9 +19,11 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.squareup.picasso.Picasso;
 
+
+//Clase para inflar el cardview con los datos solicitados
 public class PostsAdapter extends FirestoreRecyclerAdapter<PostAlarma, PostsAdapter.ViewHolder> {
 
-
+    //Declaración de variables
     Context context;
 
     public PostsAdapter(FirestoreRecyclerOptions<PostAlarma> options, Context context){

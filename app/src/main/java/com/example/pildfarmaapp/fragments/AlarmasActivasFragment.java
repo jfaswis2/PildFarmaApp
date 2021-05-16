@@ -18,6 +18,7 @@ import com.google.firebase.firestore.Query;
 
 public class AlarmasActivasFragment extends Fragment {
 
+    //Declaración de variables
     RecyclerView mRecyclerView;
     View mView;
     PostProvider mPostProvider;
@@ -27,16 +28,17 @@ public class AlarmasActivasFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+        //Asignación de variables
         mView =  inflater.inflate(R.layout.fragment_alarmas, container, false);
         mRecyclerView = mView.findViewById(R.id.recyclerViewHome);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mPostProvider = new PostProvider();
-        // Inflate the layout for this fragment
 
         return mView;
     }
 
+    //Se comprueba en la base de datos las alarmas activas y se infla la cardview
     @Override
     public void onStart() {
         super.onStart();
@@ -49,6 +51,7 @@ public class AlarmasActivasFragment extends Fragment {
         mPostAdapter.startListening();
     }
 
+    //Para de comprobar en la base de datos
     @Override
     public void onStop() {
         super.onStop();

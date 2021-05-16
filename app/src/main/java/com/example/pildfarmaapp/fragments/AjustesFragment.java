@@ -16,6 +16,8 @@ import com.example.pildfarmaapp.activities.LoginActivity;
 import com.example.pildfarmaapp.providers.AuthProvider;
 
 public class AjustesFragment extends Fragment {
+
+    //Declaración de variables
     View mView;
     CardView cardView;
     AuthProvider MAuthlogin;
@@ -26,6 +28,7 @@ public class AjustesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        //Asignación de variables
         mView = inflater.inflate(R.layout.fragment_ajustes, container, false);
         cardView = mView.findViewById(R.id.cardViewCerrarSesion);
         MAuthlogin = new AuthProvider();
@@ -37,11 +40,10 @@ public class AjustesFragment extends Fragment {
             }
         });
 
-        // Inflate the layout for this fragment
-
         return mView;
     }
 
+    //Confirmación de cerrar sesión
     private void newConfirmDialog(){
         dialogBuilder = new AlertDialog.Builder(mView.getContext());
         final View contactPopupView = getLayoutInflater().inflate(R.layout.fragment_veri_cerrar_sesion,null);
@@ -68,6 +70,7 @@ public class AjustesFragment extends Fragment {
         });
     }
 
+    //Cerrar sesión
     private void logout(){
         MAuthlogin.logout();
         Intent intent = new Intent(getContext(), LoginActivity.class);

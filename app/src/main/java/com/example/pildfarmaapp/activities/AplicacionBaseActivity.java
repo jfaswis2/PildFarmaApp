@@ -24,9 +24,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class AplicacionBaseActivity extends AppCompatActivity {
 
+    //Declaración de variables
     BottomNavigationView bottomNavigationView;
     FloatingActionButton floatingActionButton;
-    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,7 @@ public class AplicacionBaseActivity extends AppCompatActivity {
                     },100);
         }
 
+        //asignación de variables
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AlarmasActivasFragment()).commit();
@@ -63,6 +64,7 @@ public class AplicacionBaseActivity extends AppCompatActivity {
         });
     }
 
+    //Se selecciona cada fragment
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override

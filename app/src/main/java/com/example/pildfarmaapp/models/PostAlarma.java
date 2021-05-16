@@ -1,5 +1,6 @@
 package com.example.pildfarmaapp.models;
 
+//Clase con todos los datos de la alarma tomadas en una captura
 public class PostAlarma {
     private String ID;
     private String Medicamento;

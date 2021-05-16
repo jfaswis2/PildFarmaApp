@@ -10,7 +10,10 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.util.Date;
 
+//Clase para subir una imagen al Storage del firebase
 public class ImageProvider {
+
+    //Declaración de variables
     StorageReference mStorage;
 
     public ImageProvider() {

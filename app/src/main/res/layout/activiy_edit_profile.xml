@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/azul"
     android:orientation="vertical"
-    tools:context=".fragments.PerfilFragment">
+    tools:context=".activities.EditProfileActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,18 +57,11 @@
                     <ImageView
                         android:layout_width="150dp"
                         android:layout_height="90dp"
-                        android:scaleType="fitCenter"
-
-                        android:src="@drawable/ic_cake_black" />
+                        android:scaleType="fitCenter"/>
 
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 
-            <!--Option Bar-->
-
-
-
-            <!--Bootom Cards with sections-->
             <LinearLayout
                 android:id="@+id/personalinfo"
                 android:layout_width="match_parent"
@@ -99,14 +92,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
 
-                        <TextView
-                            android:id="@+id/tv_editar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Editar datos"
-                            android:textColor="#000"
-                            android:layout_marginEnd="10dp"
-                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -128,7 +113,7 @@
                                 android:padding="10dp"
                                 android:src="@drawable/ic_person_black" />
 
-                            <TextView
+                            <EditText
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
@@ -150,33 +135,9 @@
                                 android:layout_height="40dp"
                                 android:background="@drawable/circular_grey_bordersolid"
                                 android:padding="10dp"
-                                android:src="@drawable/ic_email_black" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:textColor="@color/black"
-                                android:text="jfaswis2@gmail.com"
-                                android:textSize="15sp"
-                                />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:gravity="center_vertical"
-                            android:paddingRight="8dp">
-
-                            <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:background="@drawable/circular_grey_bordersolid"
-                                android:padding="10dp"
                                 android:src="@drawable/ic_cake_black" />
 
-                            <TextView
+                            <EditText
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
@@ -200,13 +161,14 @@
                                 android:padding="10dp"
                                 android:src="@drawable/ic_hospital_black" />
 
-                            <TextView
+                            <EditText
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
                                 android:text="CAP Cotxeres"
                                 android:textSize="15sp"
-                                android:textColor="@color/black" />
+                                android:textColor="@color/black"
+                                />
                         </LinearLayout>
 
                         <LinearLayout
@@ -239,7 +201,18 @@
 
             </LinearLayout>
 
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Actualizar"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="16dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/borde_redondo_boton2"/>
+
         </LinearLayout>
+
 
     </ScrollView>
 

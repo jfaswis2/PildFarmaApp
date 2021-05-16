@@ -9,8 +9,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+//Clase provee los usuarios
 public class UsersProvider {
 
+    //Declaración de variables
     private CollectionReference mCollection;
 
     public UsersProvider() {
@@ -25,9 +27,4 @@ public class UsersProvider {
         return mCollection.document(user.getId()).set(user);
     }
 
-    public Task<Void> update(User user) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("username", user.getUsername());
-        return mCollection.document(user.getId()).update(map);
-    }
 }

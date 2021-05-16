@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    //Declaración de variables
     TextView iniciar_sesion_acregister;
 
     private EditText mEditTextNombre;
@@ -43,9 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        //mAuth = FirebaseAuth.getInstance();
-        //mFirestore = FirebaseFirestore.getInstance();
-
+        //Asignación de variables
         mEditTextNombre = findViewById(R.id.editText_register_nombre);
         mEditTextEmail = findViewById(R.id.editText_register_correo);
         mEditTextContrasena = findViewById(R.id.editText_register_contrasena);
@@ -75,6 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    //Comprueba campos de registro
     private void register(){
         String username = mEditTextNombre.getText().toString();
         String email = mEditTextEmail.getText().toString().trim();
@@ -105,6 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    //Crea el usuario (sin google)
     private void createUser(final String email, String password, String userName) {
 
         mAuthProvider.register(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -140,6 +141,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    //Se comprueba si el email es valido
     public boolean isEmailValid(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
@@ -147,6 +149,7 @@ public class RegisterActivity extends AppCompatActivity {
         return matcher.matches();
     }
 
+    //Acción del boton hacia atras
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, LoginActivity.class);

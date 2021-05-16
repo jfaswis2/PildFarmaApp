@@ -6,12 +6,15 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+//Clase para hacer las consultas de los medicamentos para colocarlos en las cardviews
 public class PostProvider {
 
+    //Declaracion de variables
     CollectionReference mCollection;
     AuthProvider mAuthProvider;
 
     public PostProvider() {
+        //Asiganación de variables
         mCollection = FirebaseFirestore.getInstance().collection("Posts");
         mAuthProvider = new AuthProvider();
     }

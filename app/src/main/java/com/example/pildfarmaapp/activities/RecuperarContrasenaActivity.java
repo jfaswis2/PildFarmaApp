@@ -12,6 +12,7 @@ import com.example.pildfarmaapp.activities.LoginActivity;
 
 public class RecuperarContrasenaActivity extends AppCompatActivity {
 
+    //Declaración de variables
     TextView textView;
 
     @Override
@@ -30,6 +31,7 @@ public class RecuperarContrasenaActivity extends AppCompatActivity {
         });
     }
 
+    //Acción del boton hacia atras
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, LoginActivity.class);

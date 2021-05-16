@@ -18,6 +18,7 @@ import com.google.firebase.firestore.Query;
 
 public class HistorialFragment extends Fragment {
 
+    //Declaración de variables
     RecyclerView mRecyclerView;
     View mView;
     PostProvider mPostProvider;
@@ -25,7 +26,8 @@ public class HistorialFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        //Asignación de variables
         mView = inflater.inflate(R.layout.fragment_historial_alarmas, container, false);
         mRecyclerView = mView.findViewById(R.id.recyclerViewHomeHistorial);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -35,6 +37,7 @@ public class HistorialFragment extends Fragment {
         return mView;
     }
 
+    //Se comprueba en la base de datos el historial de las alarmas finalizadas y se infla la cardview
     @Override
     public void onStart() {
         super.onStart();
@@ -47,6 +50,7 @@ public class HistorialFragment extends Fragment {
         mPostAdapter.startListening();
     }
 
+    //Para de leer en la base de datos
     @Override
     public void onStop() {
         super.onStop();

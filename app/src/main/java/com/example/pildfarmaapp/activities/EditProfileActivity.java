@@ -89,7 +89,7 @@ public class EditProfileActivity extends AppCompatActivity {
         mTextInputCap = findViewById(R.id.EditCap);
         mTextInputTelefono = findViewById(R.id.EditTelefono);
         mButtonActualizar = findViewById(R.id.buttonActualizar);
-        mCircleImageViewProfile = findViewById(R.id.circleImageProfile);
+        mCircleImageViewProfile = findViewById(R.id.circleImageProfileEdit);
 
         mBuilderSelector = new AlertDialog.Builder(this);
         mBuilderSelector.setTitle("Selecciona una opcion");

@@ -15,15 +15,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.example.pildfarmaapp.R;
+import com.example.pildfarmaapp.models.User;
 import com.example.pildfarmaapp.providers.AuthProvider;
 import com.example.pildfarmaapp.providers.ImageProvider;
 import com.example.pildfarmaapp.providers.UsersProvider;
 import com.example.pildfarmaapp.utils.FileUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -42,12 +48,6 @@ public class EditProfileActivity extends AppCompatActivity {
     EditText mTextInputTelefono;
     Button mButtonActualizar;
 
-    String Nombre="";
-    String Nacimiento="";
-    String Cap="";
-    String Telefono="";
-
-
 
     AlertDialog.Builder mBuilderSelector;
     CharSequence options[];
@@ -61,22 +61,20 @@ public class EditProfileActivity extends AppCompatActivity {
     String mPhotoPath;
     File mPhotoFile;
 
-    // FOTO 2
-    String mAbsolutePhotoPath2;
-    String mPhotoPath2;
-    File mPhotoFile2;
 
     File mImageFile;
-    File mImageFile2;
 
-    String mUsername = "";
-    String mPhone = "";
 
     AlertDialog mDialog;
 
     ImageProvider mImageProvider;
     UsersProvider mUsersProvider;
     AuthProvider mAuthProvider;
+
+    String Nombre="";
+    String Nacimiento="";
+    String Cap="";
+    String Telefono="";
 
 
     @Override
@@ -115,16 +113,116 @@ public class EditProfileActivity extends AppCompatActivity {
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectOptionImage();
+                selectOptionImage(1);
             }
         });
 
     }
 
-    private void selectOptionImage() {
+    private void clickEditProfile() {
+        Nombre = mTextInputUsername.getText().toString();
+        Nacimiento = mTextInputNacimiento.getText().toString();
+        Cap = mTextInputCap.getText().toString();
+        Telefono = mTextInputTelefono.getText().toString();
+
+        if (!Nombre.isEmpty() && !Telefono.isEmpty() && !Nacimiento.isEmpty()
+                && !Cap.isEmpty()) {
+            if (mImageFile != null) {
+                saveImage(mImageFile);
+            }
+            // TOMO LAS DOS FOTOS DE LA CAMARA
+            else if (mPhotoFile != null ) {
+                saveImage(mPhotoFile);
+            }
+            else if (mImageFile != null ) {
+                saveImage(mImageFile);
+            }
+            else if (mPhotoFile != null ) {
+                saveImage(mPhotoFile);
+            }
+            else {
+                Toast.makeText(this, "Debes seleccionar una imagen", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            Toast.makeText(this, "Ingrese el nombre de usuario y el telefono", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private void clickEditProfile() {
+    private void saveImage(File imageFile1) {
+        mDialog.show();
+        mImageProvider.save(EditProfileActivity.this, imageFile1).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if (task.isSuccessful()) {
+                    mImageProvider.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            User user = new User();
+                            user.setUsername(Nombre);
+                            user.setNumeroTel(Telefono);
+                            user.setImageProfile(uri.toString());
+                            user.setCap(Cap);
+                            user.setFechaNacimiento(Nacimiento);
+                            user.setId(mAuthProvider.getUid());
+                            mUsersProvider.update(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    mDialog.dismiss();
+                                    if(task.isSuccessful()){
+                                        Toast.makeText(EditProfileActivity.this, "La informacion se actualizo correctamente", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(EditProfileActivity.this, "La informacion no se pudo actualizar", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
+                            /*
+                            mImageProvider.save(EditProfileActivity.this, imageFile2).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> taskImage2) {
+                                    if (taskImage2.isSuccessful()) {
+                                        mImageProvider.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                            @Override
+                                            public void onSuccess(Uri uri2) {
+                                                String urlCover = uri2.toString();
+                                                User user = new User();
+                                                user.setUsername(mUsername);
+                                                user.setPhone(mPhone);
+                                                user.setImageProfile(urlProfile);
+                                                user.setImageCover(urlCover);
+                                                user.setId(mAuthProvider.getUid());
+                                                mUsersProvider.update(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        mDialog.dismiss();
+                                                        if (task.isSuccessful()) {
+                                                            Toast.makeText(EditProfileActivity.this, "La informacion se actualizo correctamente", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                        else {
+                                                            Toast.makeText(EditProfileActivity.this, "La informacion no se pudo actualizar", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        mDialog.dismiss();
+                                        Toast.makeText(EditProfileActivity.this, "La imagen numero 2 no se pudo guardar", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });*/
+                        }
+                    });
+                }
+                else {
+                    mDialog.dismiss();
+                    Toast.makeText(EditProfileActivity.this, "Hubo error al almacenar la imagen", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private void selectOptionImage(final int numberImage) {
@@ -184,10 +282,6 @@ public class EditProfileActivity extends AppCompatActivity {
         if (requestCode == PHOTO_REQUEST_CODE_PROFILE) {
             mPhotoPath = "file:" + photoFile.getAbsolutePath();
             mAbsolutePhotoPath = photoFile.getAbsolutePath();
-        }
-        else if (requestCode == PHOTO_REQUEST_CODE_COVER) {
-            mPhotoPath2 = "file:" + photoFile.getAbsolutePath();
-            mAbsolutePhotoPath2 = photoFile.getAbsolutePath();
         }
         return photoFile;
     }

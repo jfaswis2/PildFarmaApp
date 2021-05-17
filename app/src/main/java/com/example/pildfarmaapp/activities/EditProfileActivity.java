@@ -36,12 +36,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 
 public class EditProfileActivity extends AppCompatActivity {
 
     //Declaración de variables
-    ImageView mImageView;
+    CircleImageView mCircleImageViewProfile;
     EditText mTextInputUsername;
     EditText mTextInputNacimiento;
     EditText mTextInputCap;
@@ -88,7 +89,7 @@ public class EditProfileActivity extends AppCompatActivity {
         mTextInputCap = findViewById(R.id.EditCap);
         mTextInputTelefono = findViewById(R.id.EditTelefono);
         mButtonActualizar = findViewById(R.id.buttonActualizar);
-        mImageView = findViewById(R.id.EditImage);
+        mCircleImageViewProfile = findViewById(R.id.circleImageProfile);
 
         mBuilderSelector = new AlertDialog.Builder(this);
         mBuilderSelector.setTitle("Selecciona una opcion");
@@ -110,7 +111,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        mImageView.setOnClickListener(new View.OnClickListener() {
+        mCircleImageViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectOptionImage(1);
@@ -300,7 +301,7 @@ public class EditProfileActivity extends AppCompatActivity {
             try {
                 mPhotoFile = null;
                 mImageFile = FileUtil.from(this, data.getData());
-                mImageView.setImageBitmap(BitmapFactory.decodeFile(mImageFile.getAbsolutePath()));
+                mCircleImageViewProfile.setImageBitmap(BitmapFactory.decodeFile(mImageFile.getAbsolutePath()));
             } catch(Exception e) {
                 Log.d("ERROR", "Se produjo un error " + e.getMessage());
                 Toast.makeText(this, "Se produjo un error " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -310,7 +311,7 @@ public class EditProfileActivity extends AppCompatActivity {
         if (requestCode == PHOTO_REQUEST_CODE_PROFILE && resultCode == RESULT_OK) {
             mImageFile = null;
             mPhotoFile = new File(mAbsolutePhotoPath);
-            Picasso.with(EditProfileActivity.this).load(mPhotoPath).into(mImageView);
+            Picasso.with(EditProfileActivity.this).load(mPhotoPath).into(mCircleImageViewProfile);
         }
 
 

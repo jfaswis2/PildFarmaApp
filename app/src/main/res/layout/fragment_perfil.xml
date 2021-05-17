@@ -119,6 +119,7 @@
                                 android:src="@drawable/ic_person_black" />
 
                             <TextView
+                                android:id="@+id/NombrePerfil"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
@@ -142,6 +143,7 @@
                                 android:src="@drawable/ic_email_black" />
 
                             <TextView
+                                android:id="@+id/EmailPerfil"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
@@ -165,6 +167,7 @@
                                 android:src="@drawable/ic_cake_black" />
 
                             <TextView
+                                android:id="@+id/FechaNacimientoPerfil"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
@@ -188,6 +191,7 @@
                                 android:src="@drawable/ic_hospital_black" />
 
                             <TextView
+                                android:id="@+id/CapPerfil"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
@@ -211,6 +215,7 @@
                                 android:src="@drawable/ic_phone_black" />
 
                             <TextView
+                                android:id="@+id/NumeroPerfil"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"

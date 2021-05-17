@@ -29,6 +29,7 @@ import com.example.pildfarmaapp.utils.FileUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
@@ -99,10 +100,13 @@ public class EditProfileActivity extends AppCompatActivity {
         mUsersProvider = new UsersProvider();
         mAuthProvider = new AuthProvider();
 
+        getUser();
+
         mDialog = new SpotsDialog.Builder()
                 .setContext(this)
                 .setMessage("Espere un momento")
                 .setCancelable(false).build();
+
 
         mButtonActualizar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -315,5 +319,39 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private void getUser() {
+        mUsersProvider.getUser(mAuthProvider.getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    if (documentSnapshot.contains("numero_telefono")) {
+                        String phone = documentSnapshot.getString("numero_telefono");
+                        mTextInputTelefono.setText(phone);
+                    }
+                    if (documentSnapshot.contains("username")) {
+                        String username = documentSnapshot.getString("username");
+                        mTextInputUsername.setText(username);
+                    }
+                    if (documentSnapshot.contains("image_profile")) {
+                        String imageProfile = documentSnapshot.getString("image_profile");
+                        if (imageProfile != null) {
+                            if (!imageProfile.isEmpty()) {
+                                Picasso.with(EditProfileActivity.this).load(imageProfile).into(mCircleImageViewProfile);
+                            }
+                        }
+                    }
+                    if (documentSnapshot.contains("cap")) {
+                        String username = documentSnapshot.getString("cap");
+                        mTextInputCap.setText(username);
+                    }
+                    if (documentSnapshot.contains("fecha_nacimiento")) {
+                        String username = documentSnapshot.getString("fecha_nacimiento");
+                        mTextInputUsername.setText(username);
+                    }
+                }
+            }
+        });
     }
 }

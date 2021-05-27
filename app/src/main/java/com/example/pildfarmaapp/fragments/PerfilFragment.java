@@ -48,6 +48,13 @@ public class PerfilFragment extends Fragment {
         mImageViewCover = mView.findViewById(R.id.circleImageProfile);;
         mTextInputEmail = mView.findViewById(R.id.EmailPerfil);;
 
+        mTextInputCap.setText("");
+        mTextInputUsername.setText("");
+        mTextInputNacimiento.setText("");
+        mTextInputTelefono.setText("");
+        mTextInputEmail.setText("");
+
+
         mUsersProvider = new UsersProvider();
         mAuthProvider = new AuthProvider();
         mPostProvider = new PostProvider();
@@ -101,7 +108,7 @@ public class PerfilFragment extends Fragment {
                     }
                     if (documentSnapshot.contains("fecha_nacimiento")) {
                         String username = documentSnapshot.getString("fecha_nacimiento");
-                        mTextInputUsername.setText(username);
+                        mTextInputNacimiento.setText(username);
                     }
                 }
             }

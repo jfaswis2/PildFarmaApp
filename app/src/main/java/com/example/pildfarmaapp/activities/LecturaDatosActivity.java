@@ -226,8 +226,10 @@ public class LecturaDatosActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> taskSave) {
                                     if(taskSave.isSuccessful()){
-                                        Toast.makeText(LecturaDatosActivity.this,"La información se almacenó correctamente",
+                                        Toast.makeText(LecturaDatosActivity.this,"La información se almacenó correctamente y se ha activado" +
+                                                        "la alarma",
                                                 Toast.LENGTH_LONG).show();
+                                        ActivacionAlarma();
                                         Intent intent = new Intent(LecturaDatosActivity.this, AplicacionBaseActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
@@ -247,14 +249,16 @@ public class LecturaDatosActivity extends AppCompatActivity {
         });
     }
 
-    //Algortimo para encontrar el nombre del medicamento
+    private void ActivacionAlarma() {
+
+    }
+
+    //Algoritmo para encontrar el nombre del medicamento
     private void encontrarNombre(){
         int contador=0;
         StringBuilder sb = new StringBuilder();
         while (!Character.isDigit(reconocimientoChar[contador])) {
-            if (Character.isAlphabetic(reconocimientoChar[contador])) {
                 sb.append(reconocimientoChar[contador]);
-            }
             contador++;
         }
         String nombreReceta = sb.toString();
@@ -337,7 +341,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
 
                 }
             }
-            etFrecuencia.setText(horas);
+            etFrecuencia.setText("cada " +horas + " " +"hores");
         }
     }
 
@@ -351,7 +355,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
     }
 
     //Algortimo para encontrar la duración del tratamiento
-    private void encontrarDuracionTrata(){
+    private void encontrarDuracionTrata(){ //TODO
         if(resultadoTexto.contains("dies")) {
             int posicion = resultadoTexto.indexOf("dies");
             int valor = posicion;

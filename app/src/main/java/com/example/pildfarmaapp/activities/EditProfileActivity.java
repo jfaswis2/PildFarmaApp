@@ -135,7 +135,6 @@ public class EditProfileActivity extends AppCompatActivity {
             if (mImageFile != null) {
                 saveImage(mImageFile);
             }
-            // TOMO LAS DOS FOTOS DE LA CAMARA
             else if (mPhotoFile != null ) {
                 saveImage(mPhotoFile);
             }
@@ -348,7 +347,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     }
                     if (documentSnapshot.contains("fecha_nacimiento")) {
                         String username = documentSnapshot.getString("fecha_nacimiento");
-                        mTextInputUsername.setText(username);
+                        mTextInputNacimiento.setText(username);
                     }
                 }
             }

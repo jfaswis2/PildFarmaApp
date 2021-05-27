@@ -32,10 +32,12 @@
         android:layout_below="@+id/topbar">
 
         <LinearLayout
+            android:id="@+id/Linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="20dp"
+            android:paddingBottom="100dp"
             android:paddingTop="10dp"
             android:paddingRight="20dp">
 

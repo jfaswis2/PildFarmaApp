@@ -37,6 +37,7 @@
             android:orientation="vertical"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
+            android:paddingBottom="50dp"
             android:paddingRight="20dp">
 
             <!--Top Profile Section -->
@@ -208,6 +209,7 @@
                 android:text="Actualizar"
                 android:fontFamily="sans-serif-medium"
                 android:textSize="16dp"
+                android:layout_marginBottom="15dp"
                 android:textColor="@color/black"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/borde_redondo_boton2"/>

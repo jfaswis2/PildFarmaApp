@@ -11,8 +11,9 @@ public class PostAlarma {
     private String Imagen;
     private String IDUsuario;
     private String Estado;
+    private String Broadcaster;
 
-    public PostAlarma(String ID, String medicamento, String dosis, String frecuencia, String viaAdministracion, String duracionTratamiento, String imagen, String IDUsuario, String estado) {
+    public PostAlarma(String ID, String medicamento, String dosis, String frecuencia, String viaAdministracion, String duracionTratamiento, String imagen, String IDUsuario, String estado, String Broadcaster) {
         this.ID = ID;
         Medicamento = medicamento;
         Dosis = dosis;
@@ -22,6 +23,7 @@ public class PostAlarma {
         Imagen = imagen;
         this.IDUsuario = IDUsuario;
         Estado = estado;
+        this.Broadcaster = Broadcaster;
     }
 
     public PostAlarma() {}
@@ -94,5 +96,13 @@ public class PostAlarma {
 
     public void setEstado(String estado) {
         Estado = estado;
+    }
+
+    public String getBroadcaster() {
+        return Broadcaster;
+    }
+
+    public void setBroadcaster(String broadcaster) {
+        Broadcaster = broadcaster;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.pildfarmaapp.providers;
 
+import com.example.pildfarmaapp.models.PostAlarma;
 import com.example.pildfarmaapp.models.User;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -40,4 +41,7 @@ public class UsersProvider {
         return mCollection.document(user.getId()).update(map);
     }
 
+    public void updateRoast(User user){
+        return mCollection.document()
+    }
 }

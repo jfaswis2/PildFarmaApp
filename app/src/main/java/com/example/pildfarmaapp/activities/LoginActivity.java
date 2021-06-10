@@ -30,6 +30,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import dmax.dialog.SpotsDialog;
+
 public class LoginActivity extends AppCompatActivity {
 
     //Declaración de variables
@@ -45,7 +47,8 @@ public class LoginActivity extends AppCompatActivity {
     private UsersProvider mUsersProvider;
     private final int REQUEST_CODE_GOOGLE = 1;
     private boolean Cerrar = false;
-    private final int RC_SIGN_IN=9001;
+
+    android.app.AlertDialog mDialog;
 
 
     @Override
@@ -67,6 +70,11 @@ public class LoginActivity extends AppCompatActivity {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+
+        mDialog = new SpotsDialog.Builder()
+                .setContext(this)
+                .setMessage("Espere un momento")
+                .setCancelable(false).build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mUsersProvider = new UsersProvider();
@@ -145,11 +153,13 @@ public class LoginActivity extends AppCompatActivity {
 
     //Comprueba si el usuario existe, si no lo registra
     private void checkUserExist(String id){
+        mDialog.show();
         mUsersProvider.getUser(id).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()){
                     Intent intent = new Intent(LoginActivity.this, AplicacionBaseActivity.class);
+                    mDialog.dismiss();
                     startActivity(intent);
                 }
                 else {
@@ -165,8 +175,10 @@ public class LoginActivity extends AppCompatActivity {
                             if (task.isSuccessful()){
                                 Intent intent = new Intent(LoginActivity.this, AplicacionBaseActivity.class);
                                 startActivity(intent);
+                                mDialog.dismiss();
                             }
                             else {
+                                mDialog.dismiss();
                                 Toast.makeText(LoginActivity.this, "No se pudo almacenar la información del usuario", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -180,16 +192,18 @@ public class LoginActivity extends AppCompatActivity {
     private void loginUsuario(){
         String email = editEmail.getText().toString();
         String password = editContrasena.getText().toString();
-
+        mDialog.show();
         mAuthProvider.login(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     Intent intent = new Intent(LoginActivity.this, AplicacionBaseActivity.class);
+                    mDialog.dismiss();
                     startActivity(intent);
                     finish();
                 }
                 else {
+                    mDialog.dismiss();
                     Toast.makeText(LoginActivity.this, "El email y/o la contraseña no son correctas", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -240,8 +254,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if(mAuthProvider.getUserSession() != null){
+            mDialog.show();
             Intent intent = new Intent (LoginActivity.this, AplicacionBaseActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            mDialog.dismiss();
             startActivity(intent);
         }
     }

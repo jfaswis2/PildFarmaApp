@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -19,15 +21,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pildfarmaapp.R;
+import com.example.pildfarmaapp.alarm_management.Alarm;
 import com.example.pildfarmaapp.models.PostAlarma;
 import com.example.pildfarmaapp.providers.AuthProvider;
 import com.example.pildfarmaapp.providers.ImageProvider;
 import com.example.pildfarmaapp.providers.PostProvider;
+import com.example.pildfarmaapp.providers.UsersProvider;
 import com.example.pildfarmaapp.utils.FileUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.UploadTask;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
@@ -44,21 +49,26 @@ import java.util.Calendar;
 public class LecturaDatosActivity extends AppCompatActivity {
 
     //Declaración de variables
-    ImageView imageView;
-    Bitmap bitmap;
-    TextRecognizer recognizer;
-    EditText etMedicamento,etDosis,etFrecuencia,etViaAdmin,etDuracionTrata;
-    Uri image_uri;
-    char[] reconocimientoChar;
-    String resultadoTexto,horas,nombreReceta;
-    TextView NuevaFoto,NombreVerificacion,IntervaloFechas;
-    Button guardar,aceptarVeri,cancelarVeri;
-    AlertDialog.Builder dialogBuilder;
-    AlertDialog dialog;
-    File mImageFile;
-    PostProvider mPostProvider;
-    ImageProvider mimageProvider;
-    AuthProvider mAuthProvider;
+    private ImageView imageView;
+    private Bitmap bitmap;
+    private TextRecognizer recognizer;
+    private EditText etMedicamento,etDosis,etFrecuencia,etViaAdmin,etDuracionTrata;
+    private Uri image_uri;
+    private char[] reconocimientoChar;
+    private String resultadoTexto,horas,nombreReceta;
+    private TextView NuevaFoto,NombreVerificacion,IntervaloFechas;
+    private Button guardar,aceptarVeri,cancelarVeri;
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    private File mImageFile;
+    private PostProvider mPostProvider;
+    private ImageProvider mimageProvider;
+    private AuthProvider mAuthProvider;
+    private static int broadcastCode=0;
+    private int horasFrecuencia;
+    private int diasTratamiento;
+    private UsersProvider mUsersProvider;
+    private int numeroBroad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +86,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
         etDuracionTrata = findViewById(R.id.DuracionTratamiento);
         imageView = findViewById(R.id.Foto);
         NuevaFoto = findViewById(R.id.NuevaFoto);
+        mUsersProvider = new UsersProvider();
         guardar = findViewById(R.id.btn_ver_datos_guardar);
         startCropActivity();
 
@@ -222,6 +233,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
                             post.setDuracionTratamiento(DuracionTrata);
                             post.setIDUsuario(mAuthProvider.getUid());
                             post.setEstado("Activo");
+                            post.setBroadcaster(String.valueOf(broadcastCode));
                             mPostProvider.save(post).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> taskSave) {
@@ -230,6 +242,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
                                                         "la alarma",
                                                 Toast.LENGTH_LONG).show();
                                         ActivacionAlarma();
+                                        broadcastCode++;
                                         Intent intent = new Intent(LecturaDatosActivity.this, AplicacionBaseActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
@@ -250,7 +263,28 @@ public class LecturaDatosActivity extends AppCompatActivity {
     }
 
     private void ActivacionAlarma() {
+        getBroadcastCode();
+        Intent intent = new Intent(getApplicationContext(), Alarm.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(LecturaDatosActivity.this,
+                numeroBroad,intent,0);
+        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+horasFrecuencia*1000,horasFrecuencia*1000,
+                pendingIntent);
+        Toast.makeText(this, "Alarm set in 3 seconds", Toast.LENGTH_SHORT).show();
+    }
 
+    public void getBroadcastCode(){
+        mUsersProvider.getUser(mAuthProvider.getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    if(documentSnapshot.contains("Broadcaster")){
+                        String NumBroadcaster = documentSnapshot.getString("Broadcaster");
+                        numeroBroad = Integer.parseInt(NumBroadcaster);
+                    }
+                }
+            }
+        });
     }
 
     //Algoritmo para encontrar el nombre del medicamento
@@ -341,6 +375,8 @@ public class LecturaDatosActivity extends AppCompatActivity {
 
                 }
             }
+
+            horasFrecuencia = Integer.getInteger(horas);
             etFrecuencia.setText("cada " +horas + " " +"hores");
         }
     }
@@ -379,6 +415,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
                     }
                 }
                 this.horas=horas;
+                diasTratamiento = Integer.getInteger(horas);
                 etDuracionTrata.setText(horas + " dies");
             }
 

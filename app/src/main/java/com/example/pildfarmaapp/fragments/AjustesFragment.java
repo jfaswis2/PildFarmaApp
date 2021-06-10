@@ -15,6 +15,8 @@ import com.example.pildfarmaapp.R;
 import com.example.pildfarmaapp.activities.LoginActivity;
 import com.example.pildfarmaapp.providers.AuthProvider;
 
+import dmax.dialog.SpotsDialog;
+
 public class AjustesFragment extends Fragment {
 
     //Declaración de variables
@@ -23,6 +25,7 @@ public class AjustesFragment extends Fragment {
     AuthProvider MAuthlogin;
     AlertDialog.Builder dialogBuilder;
     AlertDialog dialog;
+    AlertDialog dialog2;
     Button aceptar,cancelar;
 
     @Override
@@ -32,6 +35,10 @@ public class AjustesFragment extends Fragment {
         mView = inflater.inflate(R.layout.fragment_ajustes, container, false);
         cardView = mView.findViewById(R.id.cardViewCerrarSesion);
         MAuthlogin = new AuthProvider();
+        dialog2 = new SpotsDialog.Builder()
+                .setContext(getContext())
+                .setMessage("Espere un momento")
+                .setCancelable(false).build();
 
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,8 +54,8 @@ public class AjustesFragment extends Fragment {
     private void newConfirmDialog(){
         dialogBuilder = new AlertDialog.Builder(mView.getContext());
         final View contactPopupView = getLayoutInflater().inflate(R.layout.fragment_veri_cerrar_sesion,null);
-        aceptar = (Button) contactPopupView.findViewById(R.id.bttn_aceptar_cerrar_sesion);
-        cancelar = (Button) contactPopupView.findViewById(R.id.bttn_cancelar_cerrar_sesion);
+        aceptar = contactPopupView.findViewById(R.id.bttn_aceptar_cerrar_sesion);
+        cancelar = contactPopupView.findViewById(R.id.bttn_cancelar_cerrar_sesion);
 
         dialogBuilder.setView(contactPopupView);
         dialog = dialogBuilder.create();
@@ -72,9 +79,11 @@ public class AjustesFragment extends Fragment {
 
     //Cerrar sesión
     private void logout(){
+        dialog2.show();
         MAuthlogin.logout();
         Intent intent = new Intent(getContext(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        dialog2.dismiss();
         startActivity(intent);
     }
 }

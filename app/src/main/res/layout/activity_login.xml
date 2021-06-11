@@ -97,18 +97,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editText_login_contrasena" />
 
-    <CheckBox
-        android:id="@+id/checkBox_login_sesion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/no_cerrar_sesion"
-        android:fontFamily="sans-serif-medium"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintStart_toStartOf="@+id/editText_login_contrasena"
-        app:layout_constraintTop_toBottomOf="@+id/editText_login_contrasena"
-        android:buttonTint="@color/azul"/>
-
     <View
         android:id="@+id/view2"
         android:layout_width="0dp"
@@ -172,13 +160,10 @@
         android:id="@+id/bttntext_recuperar_contraseña_aclogin"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="36dp"
         android:layout_marginTop="22dp"
         android:text="@string/login_recuperar_contrasena"
         android:textColor="@color/azul"
         app:layout_constraintEnd_toEndOf="@+id/editText_login_contrasena"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/checkBox_login_sesion"
         app:layout_constraintTop_toBottomOf="@+id/editText_login_contrasena" />
 
 

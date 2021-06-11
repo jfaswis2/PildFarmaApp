@@ -41,7 +41,4 @@ public class UsersProvider {
         return mCollection.document(user.getId()).update(map);
     }
 
-    public void updateRoast(User user){
-        return mCollection.document()
-    }
 }

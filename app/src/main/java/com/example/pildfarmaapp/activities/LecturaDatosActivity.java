@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -69,6 +70,8 @@ public class LecturaDatosActivity extends AppCompatActivity {
     private int diasTratamiento;
     private UsersProvider mUsersProvider;
     private int numeroBroad;
+    PostAlarma post;
+    private ProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +91,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
         NuevaFoto = findViewById(R.id.NuevaFoto);
         mUsersProvider = new UsersProvider();
         guardar = findViewById(R.id.btn_ver_datos_guardar);
+        mDialog = new ProgressDialog(this);
         startCropActivity();
 
         NuevaFoto.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +118,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
         final View contactPopupView = getLayoutInflater().inflate(R.layout.fragment_verificacion,null);
         NombreVerificacion = (TextView) contactPopupView.findViewById(R.id.Nombre_medicamento_verificacion);
         NombreVerificacion.setText(nombreReceta);
+        post = new PostAlarma();
         IntervaloFechas = (TextView) contactPopupView.findViewById(R.id.intervalo_fechas_verfificacion);
         IntervaloFechas.setText(CalculoFecha());
         aceptarVeri = (Button) contactPopupView.findViewById(R.id.bttn_aceptar_cerrar_sesion);
@@ -139,6 +144,9 @@ public class LecturaDatosActivity extends AppCompatActivity {
     }
 
     private void guardarDatosFireBaseReceta(){
+        mDialog.setMessage("Espere un momento");
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.show();
         String Nombre= etMedicamento.getText().toString();
         String Dosis=etDosis.getText().toString();
         String Frecuencia=etFrecuencia.getText().toString();
@@ -196,7 +204,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
                         encontrarFrecuecia();
                         encontrarViaAdministracion();
                         encontrarDuracionTrata();
-                        //editText.setText(resultadoTexto);//TODO
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -204,8 +212,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
 
                     }
                 });
-                //ImageView myImageView = findViewById(R.id.Foto);//TODO
-                //myImageView.setImageURI(resultUri);
+
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
@@ -224,7 +231,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
                         public void onSuccess(Uri uri) {
                             LoginActivity login = new LoginActivity();
                             String url = uri.toString();
-                            PostAlarma post = new PostAlarma();
+                            int operacionCantidad= (24/horasFrecuencia)*diasTratamiento;
                             post.setImagen(url);
                             post.setMedicamento(Nombre);
                             post.setDosis(Dosis);
@@ -234,6 +241,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
                             post.setIDUsuario(mAuthProvider.getUid());
                             post.setEstado("Activo");
                             post.setBroadcaster(String.valueOf(broadcastCode));
+                            post.setCantidad(String.valueOf(operacionCantidad));
                             mPostProvider.save(post).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> taskSave) {
@@ -246,6 +254,7 @@ public class LecturaDatosActivity extends AppCompatActivity {
                                         Intent intent = new Intent(LecturaDatosActivity.this, AplicacionBaseActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
+                                        mDialog.dismiss();
                                     }
                                     else{
                                         Toast.makeText(LecturaDatosActivity.this,"No se pudo almacenar la información",
@@ -268,9 +277,9 @@ public class LecturaDatosActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(LecturaDatosActivity.this,
                 numeroBroad,intent,0);
         AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+horasFrecuencia*1000,horasFrecuencia*1000,
+        am.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+horasFrecuencia*3600*1000,horasFrecuencia*3600*1000,
                 pendingIntent);
-        Toast.makeText(this, "Alarm set in 3 seconds", Toast.LENGTH_SHORT).show();
+        setNewBroad();
     }
 
     public void getBroadcastCode(){
@@ -283,6 +292,17 @@ public class LecturaDatosActivity extends AppCompatActivity {
                         numeroBroad = Integer.parseInt(NumBroadcaster);
                     }
                 }
+            }
+        });
+    }
+
+    public void setNewBroad(){
+        broadcastCode++;
+        post.setBroadcaster(String.valueOf(broadcastCode));
+        mPostProvider.update(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
             }
         });
     }
@@ -376,8 +396,8 @@ public class LecturaDatosActivity extends AppCompatActivity {
                 }
             }
 
-            horasFrecuencia = Integer.getInteger(horas);
-            etFrecuencia.setText("cada " +horas + " " +"hores");
+            horasFrecuencia = Integer.parseInt(horas);
+            etFrecuencia.setText("Cada " +horas + " " +"hores");
         }
     }
 
@@ -415,11 +435,12 @@ public class LecturaDatosActivity extends AppCompatActivity {
                     }
                 }
                 this.horas=horas;
-                diasTratamiento = Integer.getInteger(horas);
+                diasTratamiento = Integer.parseInt(horas);
                 etDuracionTrata.setText(horas + " dies");
             }
 
             catch (Exception e){
+                e.printStackTrace();
                 etDuracionTrata.setText("No encontrado");
             }
     }}
